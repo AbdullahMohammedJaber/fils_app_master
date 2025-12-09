@@ -1,6 +1,6 @@
 # fils
 
-A new Flutter project.
+Fils is an innovative app that combines traditional shopping with live auctions and direct sales. You can buy products and pay directly through the app, as well as participate in live auctions and bid on products with ease. The app also allows you to send gifts and manage your digital wallet for seamless and secure transactions. Enjoy a unique shopping experience where interaction and fun come together!
 
 ## Getting Started
 
