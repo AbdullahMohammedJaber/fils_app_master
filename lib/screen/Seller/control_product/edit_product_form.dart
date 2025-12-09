@@ -1,0 +1,466 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
+import 'package:easy_localization/easy_localization.dart';
+import 'package:fils/controller/provider/app_notifire.dart';
+import 'package:fils/controller/provider/edit_product_notifire.dart';
+import 'package:fils/controller/provider/floating_button_provider.dart';
+
+import 'package:fils/model/response/category_response.dart';
+import 'package:fils/model/response/seller/details_product_seller.dart';
+import 'package:fils/screen/Seller/control_product/show_image.dart';
+import 'package:fils/screen/Seller/control_product/show_multi_image.dart';
+import 'package:fils/utils/const.dart';
+import 'package:fils/utils/enum/request_type.dart';
+import 'package:fils/utils/http/dialog_reauest_multi.dart';
+import 'package:fils/utils/http/dialog_request.dart';
+
+import 'package:fils/utils/strings_app.dart';
+import 'package:fils/utils/theme/color_manager.dart';
+import 'package:fils/widget/button_widget.dart';
+import 'package:fils/widget/custom_validation.dart';
+import 'package:fils/widget/defualt_text_form_faild.dart';
+import 'package:fils/widget/defulat_text.dart';
+import 'package:fils/widget/item_back.dart';
+import 'package:flutter/cupertino.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+import 'package:provider/provider.dart';
+
+class EditProductForm extends StatelessWidget {
+  final DetailsProductSeller detailsProductSellerResponse;
+
+  EditProductForm({super.key, required this.detailsProductSellerResponse});
+
+  final _key = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<FloatingButtonController>(context, listen: false).hide();
+    });
+    return ChangeNotifierProvider(
+      create: (context) => EditProductNotifire(detailsProductSellerResponse),
+      child: Consumer2<EditProductNotifire, AppNotifire>(
+        builder: (context, controller, app, child) {
+          return Scaffold(
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _key,
+                  child: Column(
+                    children: [
+                      SizedBox(height: heigth * 0.06, width: width),
+                      itemBackAndTitle(context, title: "Edit Product".tr()),
+                      SizedBox(height: heigth * 0.08),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          DefaultText(
+                            "Product Name".tr(),
+                            color: blackColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                          SizedBox(width: width, height: heigth * 0.01),
+                          ValidateWidget(
+                            validator: (value) {
+                              if (controller.productNameEdit.text.isEmpty) {
+                                return requiredField;
+                              } else {
+                                return null;
+                              }
+                            },
+                            child: TextFormFieldWidget(
+                              isPreffix: true,
+                              controller: controller.productNameEdit,
+                              textInputType: TextInputType.name,
+                              hintText: "Toyota car".tr(),
+                              pathIconPrefix: "assets/icons/product_name.svg",
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: heigth * 0.02),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          DefaultText(
+                            "Product price".tr(),
+                            color: blackColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                          SizedBox(width: width, height: heigth * 0.01),
+                          ValidateWidget(
+                            validator: (value) {
+                              if (controller.productPriceEdit.text.isEmpty ||
+                                  controller.productPriceEdit.text == "0") {
+                                return requiredField;
+                              } else {
+                                return null;
+                              }
+                            },
+                            child: TextFormFieldWidget(
+                              isPreffix: true,
+                              isDouble: true,
+                              controller: controller.productPriceEdit,
+                              textInputType: TextInputType.number,
+                              hintText: "500 ${app.currancy}".tr(),
+                              pathIconPrefix: "assets/icons/product_price.svg",
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: heigth * 0.02),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          DefaultText(
+                            "Discount %".tr(),
+                            color: blackColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                          SizedBox(width: width, height: heigth * 0.01),
+                          ValidateWidget(
+                            validator: (value) {
+                              if (controller.productDiscountEdit.text.isEmpty) {
+                                return requiredField;
+                              } else {
+                                return null;
+                              }
+                            },
+                            child: TextFormFieldWidget(
+                              isPreffix: true,
+                              isDouble: true,
+                              controller: controller.productDiscountEdit,
+                              textInputType: TextInputType.number,
+                              hintText: "0%",
+                              pathIconPrefix: "assets/icons/product_price.svg",
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: heigth * 0.02),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          DefaultText(
+                            "Category".tr(),
+                            color: blackColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                          SizedBox(width: width, height: heigth * 0.01),
+                          ValidateWidget(
+                            validator: (value) {
+                              if (controller.categoryIdSelect == null) {
+                                return requiredField;
+                              } else {
+                                return null;
+                              }
+                            },
+                            child: TextFormFieldWidget(
+                              isPreffix: true,
+                              hintText: controller.categoryNameSelect,
+                              pathIconPrefix: "assets/icons/add_cir.svg",
+                              isIcon: true,
+                              onTap: () {
+                                showCupertinoDialog(
+                                  context: context,
+                                  builder:
+                                      (context) => InfiniteScrollDialog(
+                                        endpoint: 'categories',
+                                        itemSearchString: (p0) => p0.name,
+                                        cacheKey: "category_addProduct",
+                                        callback: (item) {
+                                          controller.changeCategoryId(
+                                            item!.id,
+                                            item.name,
+                                          );
+                                          controller.categoryId = [];
+                                          controller.categoryName = [];
+                                          controller.category = "";
+                                        },
+                                        requestType: RequestType.get,
+                                        title: "Category".tr(),
+                                        itemBuilder: (context, item) {
+                                          return DefaultText(
+                                            item.name,
+                                            overflow: TextOverflow.visible,
+                                            fontSize: 12,
+                                          );
+                                        },
+                                        parseResponse:
+                                            (p0) => Datum.fromJson(p0),
+                                      ),
+                                );
+                              },
+                              pathIcon: "assets/icons/drob.svg",
+                            ),
+                          ),
+                          SizedBox(height: heigth * 0.02),
+                          if (controller.categoryIdSelect != null)
+                            ValidateWidget(
+                              validator: (value) {
+                                if (controller.categoryId.isEmpty) {
+                                  return requiredField;
+                                } else {
+                                  return null;
+                                }
+                              },
+                              child: TextFormFieldWidget(
+                                isPreffix: true,
+                                hintText: controller.category,
+                                pathIconPrefix: "assets/icons/add_cir.svg",
+                                isIcon: true,
+                                onTap: () {
+                                  showCupertinoDialog(
+                                    context: context,
+                                    builder:
+                                        (context) => MultiSelectScrollDialog(
+                                          endpoint:
+                                              'sub-categories/${controller.categoryIdSelect}',
+                                          itemSearchString: (p0) => p0.name,
+
+                                          callback: (item) {
+                                            controller.changeListCategory(item);
+                                          },
+                                          requestType: RequestType.get,
+                                          title: "Category".tr(),
+                                          itemBuilder: (context, item) {
+                                            return DefaultText(
+                                              item.name,
+                                              overflow: TextOverflow.visible,
+                                              fontSize: 12,
+                                            );
+                                          },
+                                          parseResponse:
+                                              (p0) => Datum.fromJson(p0),
+                                        ),
+                                  );
+                                },
+                                pathIcon: "assets/icons/drob.svg",
+                              ),
+                            ),
+                        ],
+                      ),
+                      SizedBox(height: heigth * 0.02),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              DefaultText(
+                                "Upload Product image".tr(),
+                                color: blackColor,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                              DefaultText(
+                                " * ".tr(),
+                                color: error40,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: width, height: heigth * 0.01),
+                          ValidateWidget(
+                            validator: (value) {
+                              if (controller.imageFileEdit == null &&
+                                  controller.thumbnailImgUrl.isEmpty) {
+                                return requiredField;
+                              } else {
+                                return null;
+                              }
+                            },
+                            child: TextFormFieldWidget(
+                              isPreffix: true,
+                              onTap: () {
+                                controller.selectAndUploadImageEdit();
+                              },
+                              hintText:
+                                  controller.imageFileEdit != null ||
+                                          controller.thumbnailImgUrl.isNotEmpty
+                                      ? "Uploaded Images".tr()
+                                      : "product image".tr(),
+                              pathIconPrefix: "assets/icons/product_image.svg",
+                              customIcon: Container(
+                                width: width * 0.1,
+                                height: heigth * 0.06,
+                                decoration: BoxDecoration(
+                                  color: greyLight,
+                                  borderRadius:
+                                      const BorderRadiusDirectional.only(
+                                        bottomEnd: Radius.circular(12),
+                                        topEnd: Radius.circular(12),
+                                      ),
+                                ),
+                                child: Center(
+                                  child: SvgPicture.asset(
+                                    "assets/icons/gellary_black.svg",
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          showImageEdit(),
+                        ],
+                      ),
+                      SizedBox(height: heigth * 0.02),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          DefaultText(
+                            "Upload many Product image (optional)".tr(),
+                            color: blackColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                          SizedBox(width: width, height: heigth * 0.01),
+                          ValidateWidget(
+                            validator: (value) {
+                              return null;
+                            },
+                            child: TextFormFieldWidget(
+                              isPreffix: true,
+                              onTap: () {
+                                controller.selectAndUploadImagesEdit();
+                              },
+                              hintText:
+                                  controller.imageUrlListEdit.isNotEmpty
+                                      ? "${controller.imageUrlListEdit.length} " +
+                                          "Images".tr()
+                                      : controller.imageFilesListEdit.isNotEmpty
+                                      ? "${controller.imageFilesListEdit.length} " +
+                                          "Images".tr()
+                                      : "product image".tr(),
+                              pathIconPrefix: "assets/icons/product_image.svg",
+                              customIcon: Container(
+                                width: width * 0.1,
+                                height: heigth * 0.06,
+                                decoration: BoxDecoration(
+                                  color: greyLight,
+                                  borderRadius:
+                                      const BorderRadiusDirectional.only(
+                                        bottomEnd: Radius.circular(12),
+                                        topEnd: Radius.circular(12),
+                                      ),
+                                ),
+                                child: Center(
+                                  child: SvgPicture.asset(
+                                    "assets/icons/gellary_black.svg",
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          showMultiImageEdit(),
+                        ],
+                      ),
+                      SizedBox(width: width, height: heigth * 0.01),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          DefaultText(
+                            "Product Quantity".tr(),
+                            color: blackColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                          SizedBox(width: width, height: heigth * 0.01),
+                          ValidateWidget(
+                            validator: (value) {
+                              if (controller.productQuantityEdit.text.isEmpty) {
+                                return requiredField;
+                              } else {
+                                return null;
+                              }
+                            },
+                            child: TextFormFieldWidget(
+                              isPreffix: true,
+                              controller: controller.productQuantityEdit,
+                              textInputType: TextInputType.number,
+                              hintText: "2".tr(),
+                              pathIconPrefix:
+                                  "assets/icons/product_quantity.svg",
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(width: width, height: heigth * 0.02),
+                      Row(
+                        children: [
+                          SvgPicture.asset("assets/icons/note.svg"),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: DefaultText(
+                              "The entry must be a number only.".tr(),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: textColor,
+                              overflow: TextOverflow.visible,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: heigth * 0.02),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          DefaultText(
+                            "Product details".tr(),
+                            color: blackColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                          SizedBox(width: width, height: heigth * 0.01),
+                          ValidateWidget(
+                            validator: (value) {
+                              if (controller.productDetailsEdit.text.isEmpty) {
+                                return requiredField;
+                              } else {
+                                return null;
+                              }
+                            },
+                            child: TextFormFieldWidget(
+                              maxLine: 5,
+                              controller: controller.productDetailsEdit,
+                              textInputType: TextInputType.name,
+                              hintText: "".tr(),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: heigth * 0.02),
+                      SizedBox(height: heigth * 0.05),
+                      ButtonWidget(
+                        onTap: () {
+                          if (!_key.currentState!.validate()) {
+                          } else {
+                            controller.editProduct(
+                              context,
+                              detailsProductSellerResponse.id,
+                            );
+                          }
+                        },
+                        title: "Edit".tr(),
+                        fontType: FontType.SemiBold,
+                        colorButton: secondColor,
+                      ),
+                      SizedBox(height: heigth * 0.1),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
