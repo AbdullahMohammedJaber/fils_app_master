@@ -19,5 +19,21 @@ samples, guidance on mobile development, and a full API reference.
 
 ### Home Screen
 ![Home Screen](assets/screen/home.png)
-
- 
+### C_Home Screen
+![c_home Screen](assets/screen/c_home.png)
+### Cart Screen
+![cart Screen](assets/screen/cart.png)
+### Auction Screen
+![auction Screen](assets/screen/auction.png)
+### Reels Screen
+![Reels Screen](assets/screen/reel.png)
+### Haraj Screen
+![Haraj Screen](assets/screen/haraj.png)
+### Profile Screen
+![Profile Screen](assets/screen/profile.png)
+### Home Seller Screen
+![Home Seller Screen](assets/screen/home_seller.png)
+### Payment Screen
+![Payment Screen](assets/screen/pay.png)
+### Boot Screen
+![Boot Screen](assets/screen/boot.png)
