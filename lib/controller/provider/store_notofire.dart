@@ -104,7 +104,7 @@ class StoreNotifire with ChangeNotifier {
   }
 
   functionAddCart({
-    required ProductData details,
+    required dynamic id,
     bool isAuction = false,
   }) async {
     showBoatToast();
@@ -112,7 +112,7 @@ class StoreNotifire with ChangeNotifier {
       requestType: RequestType.post,
       endpoint: "$addCart?is_auction=0",
       fields: {
-        "id": details.id,
+        "id":  id,
         if (nameSizeSelect != null) "variant": nameSizeSelect,
         "quantity": countItemForOrder,
       },

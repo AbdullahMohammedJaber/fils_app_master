@@ -14,6 +14,7 @@ import 'package:fils/utils/animation/custom_fade_animation.dart';
 import 'package:fils/utils/const.dart';
 import 'package:fils/utils/storage/storage.dart';
 import 'package:fils/widget/item_search.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../auth/login/screen/login_screen.dart';
@@ -31,65 +32,78 @@ class HomeScreen extends StatelessWidget {
         create: (context) => HomeNotifire(),
         builder: (context, _) {
           homeNotifire = context.watch();
-          return Scaffold(
-            appBar: AppBar(toolbarHeight: 0,
+          return Stack(
+            children: [
+              Positioned(child: Image.asset("assets/icons/home_bar.png")),
+              Scaffold(
+                appBar: AppBar(
+                  toolbarHeight: 0,
 
-            ),
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: heigth * 0.02),
-                isLogin()
-                    ? authItem(homeNotifire, context)
-                    : Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: GestureDetector(
-                        onTap: () {
-                          ToWithFade(context, const LoginScreen());
-                        },
-                        child: SizedBox(
-                          child: Row(
-                            children: [
-                              Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: grey4,
-                                ),
-                                child: Icon(Icons.person, color: white),
+                  systemOverlayStyle: SystemUiOverlayStyle(
+                    statusBarIconBrightness: Brightness.light,
+                    statusBarBrightness: Brightness.dark,
+                    statusBarColor: Colors.transparent,
+                  ),
+                  backgroundColor: primaryDarkColor,
+                ),
+                backgroundColor: Colors.transparent,
+                body: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: heigth * 0.02),
+                    isLogin()
+                        ? authItem(homeNotifire, context)
+                        : Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: GestureDetector(
+                            onTap: () {
+                              ToWithFade(context, const LoginScreen());
+                            },
+                            child: SizedBox(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: grey4,
+                                    ),
+                                    child: Icon(Icons.person, color: white),
+                                  ),
+                                  SizedBox(width: width * 0.02),
+                                  DefaultText(
+                                    "Login".tr(),
+                                    color: getTheme() ? white : blackColor,
+                                    fontSize: 14,
+                                  ),
+                                ],
                               ),
-                              SizedBox(width: width * 0.02),
-                              DefaultText(
-                                "Login".tr(),
-                                color: getTheme() ? white : blackColor,
-                                fontSize: 14,
-                              ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                    ),
 
-                isLogin()
-                    ? getUser()!.user!.type != "customer"
-                        ? const SizedBox()
-                        : Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 10,
-                          ),
-                          child: ItemSearch(),
-                        )
-                    : const SizedBox(),
+                    isLogin()
+                        ? getUser()!.user!.type != "customer"
+                            ? const SizedBox()
+                            : Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 10,
+                              ),
+                              child: ItemSearch(),
+                            )
+                        : const SizedBox(),
 
-                isLogin()
-                    ? getUser()!.user!.type == "customer"
-                        ? HomeBuyer(homeNotifire: homeNotifire!)
-                        : HomeSeller()
-                    : HomeBuyer(homeNotifire: homeNotifire!),
-              ],
-            ),
+                    isLogin()
+                        ? getUser()!.user!.type == "customer"
+                            ? HomeBuyer(homeNotifire: homeNotifire!)
+                            : HomeSeller()
+                        : HomeBuyer(homeNotifire: homeNotifire!),
+                  ],
+                ),
+              ),
+            ],
           );
         },
       ),

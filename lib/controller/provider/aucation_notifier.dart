@@ -187,7 +187,7 @@ class AuctionNotifier with ChangeNotifier {
   }
 
   ////////////////////////////////////////////////////////
-  bool isFinishAuction = false;
+/*  bool isFinishAuction = false;
   bool showBottomSheet = false;
   bool isWinner = false;
   StreamSubscription<DatabaseEvent>? _bidsSubscriptionWin;
@@ -248,7 +248,7 @@ class AuctionNotifier with ChangeNotifier {
             }
           }
         });
-  }
+  }*/
 
   ///////////////////////////////////////////////////////
   bool _showScrollDownButton = false;

@@ -254,7 +254,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => AuthNotifire()),
         ChangeNotifierProvider(create: (context) => UserNotifier()),
         ChangeNotifierProvider(create: (context) => AuctionNotifier()),
-        ChangeNotifierProvider(create: (context) => VideoController()),
+        ChangeNotifierProvider(create: (context) => ReelsProvider()),
         ChangeNotifierProvider(create: (context) => WalletNotifire()),
         ChangeNotifierProvider(create: (context) => FloatingButtonController()),
         ChangeNotifierProvider(create: (context) => ProductNotifire()),

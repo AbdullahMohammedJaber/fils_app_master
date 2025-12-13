@@ -19,30 +19,37 @@ class ItemTimerLeftSeller extends StatefulWidget {
 
 class _ItemTimerLeftSellerState extends State<ItemTimerLeftSeller> {
   late Auction remainingTime;
+  late Auction startTime;
   late Timer timer;
 
-  bool _hasTimeLeft() {
-    return remainingTime.days > 0 ||
-        remainingTime.hours > 0 ||
-        remainingTime.minutes > 0 ||
-        remainingTime.seconds > 0;
+  @override
+  void dispose() {
+    timer.cancel(); // Cancel the timer when the widget is disposed
+    super.dispose();
   }
 
-  void _decrementTime() {
-    if (remainingTime.seconds > 0) {
-      remainingTime.seconds--;
+  bool _hasTimeLeft(Auction time) {
+    return time.days > 0 ||
+        time.hours > 0 ||
+        time.minutes > 0 ||
+        time.seconds > 0;
+  }
+
+  void _decrementTime(Auction time) {
+    if (time.seconds > 0) {
+      time.seconds--;
     } else {
-      remainingTime.seconds = 59;
-      if (remainingTime.minutes > 0) {
-        remainingTime.minutes--;
+      time.seconds = 59;
+      if (time.minutes > 0) {
+        time.minutes--;
       } else {
-        remainingTime.minutes = 59;
-        if (remainingTime.hours > 0) {
-          remainingTime.hours--;
+        time.minutes = 59;
+        if (time.hours > 0) {
+          time.hours--;
         } else {
-          remainingTime.hours = 23;
-          if (remainingTime.days > 0) {
-            remainingTime.days--;
+          time.hours = 23;
+          if (time.days > 0) {
+            time.days--;
           }
         }
       }
@@ -50,20 +57,23 @@ class _ItemTimerLeftSellerState extends State<ItemTimerLeftSeller> {
   }
 
   @override
-  void dispose() {
-    timer.cancel();
-    super.dispose();
-  }
-
-  @override
   void initState() {
     super.initState();
+
+    startTime = widget.data.auction_start_date!;
     remainingTime = widget.data.auctionTimeLeft;
 
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+
       setState(() {
-        if (_hasTimeLeft()) {
-          _decrementTime();
+        if (_hasTimeLeft(startTime)) {
+          _decrementTime(startTime);
+        } else if (_hasTimeLeft(remainingTime)) {
+          _decrementTime(remainingTime);
         } else {
           timer.cancel();
         }
@@ -78,12 +88,19 @@ class _ItemTimerLeftSellerState extends State<ItemTimerLeftSeller> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          DefaultText(
-            "Time left".tr(),
-            fontSize: 16,
-            color: const Color(0xff5A5555),
-            fontWeight: FontWeight.w500,
-          ),
+          widget.data.status == "coming"
+              ? DefaultText(
+                "It begins after".tr(),
+                fontSize: 16,
+                color: const Color(0xff5A5555),
+                fontWeight: FontWeight.w500,
+              )
+              : DefaultText(
+                "Time left".tr(),
+                fontSize: 16,
+                color: const Color(0xff5A5555),
+                fontWeight: FontWeight.w500,
+              ),
           const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -91,11 +108,29 @@ class _ItemTimerLeftSellerState extends State<ItemTimerLeftSeller> {
             children: [
               _buildTimeUnit(remainingTime.days, "Days".tr()),
               _buildColon(),
-              _buildTimeUnit(remainingTime.hours, "Hours".tr()),
+              _buildTimeUnit(
+                (_hasTimeLeft(startTime)
+                        ? startTime.hours
+                        : remainingTime.hours)
+                    .toString(),
+                "Hours".tr(),
+              ),
               _buildColon(),
-              _buildTimeUnit(remainingTime.minutes, "Minute".tr()),
+              _buildTimeUnit(
+                (_hasTimeLeft(startTime)
+                        ? startTime.minutes
+                        : remainingTime.minutes)
+                    .toString(),
+                "Minute".tr(),
+              ),
               _buildColon(),
-              _buildTimeUnit(remainingTime.seconds, "Second".tr()),
+              _buildTimeUnit(
+                (_hasTimeLeft(startTime)
+                        ? startTime.seconds
+                        : remainingTime.seconds)
+                    .toString(),
+                "Second".tr(),
+              ),
             ],
           ),
         ],

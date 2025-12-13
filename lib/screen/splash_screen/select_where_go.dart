@@ -61,7 +61,7 @@ class SelectWhereGoScreen extends StatelessWidget {
             visible: true,
             onTap: () {
               toRemoveAll(context, const RootAppScreen());
-              ToWithFade(context, const VideoScreen());
+              ToWithFade(context, const ReelsScreen());
             },
           ),
           SpeedDialChild(

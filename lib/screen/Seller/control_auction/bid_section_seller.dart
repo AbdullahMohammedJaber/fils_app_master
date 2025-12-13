@@ -26,10 +26,10 @@ class _BidsSectionSellerState extends State<BidsSectionSeller> {
     context.read<AuctionNotifier>().fetchBids(widget.id);
 
     super.initState();
-    context.read<AuctionNotifier>().checkAuction(
+    /*context.read<AuctionNotifier>().checkAuction(
           widget.id,
           widget.name,
-        );
+        );*/
     _scrollController.addListener(_onScroll);
   }
 

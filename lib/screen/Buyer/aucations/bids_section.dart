@@ -38,7 +38,7 @@ class _BidsSectionState extends State<BidsSection> {
     context.read<AuctionNotifier>().fetchBids(widget.id);
 
     super.initState();
-    context.read<AuctionNotifier>().checkAuction(widget.id, widget.name);
+    /*context.read<AuctionNotifier>().checkAuction(widget.id, widget.name);*/
     _scrollController.addListener(_onScroll);
   }
 

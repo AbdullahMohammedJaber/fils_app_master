@@ -74,7 +74,7 @@ Widget authItem(HomeNotifire? homeNotifire, BuildContext context) {
                             children: [
                               DefaultText(
                                 user.greeting.tr(),
-                                color: getTheme() ? white : grey,
+                                color:  white ,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 12,
                               ),

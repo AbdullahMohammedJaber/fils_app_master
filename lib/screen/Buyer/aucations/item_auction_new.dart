@@ -51,17 +51,14 @@ class _ItemAuctionNewState extends State<ItemAuctionNew> {
       setState(() {
         if (_hasTimeLeft(startTime)) {
           _decrementTime(startTime);
-        }
-        else if (_hasTimeLeft(remainingTime)) {
+        } else if (_hasTimeLeft(remainingTime)) {
           _decrementTime(remainingTime);
-        }
-        else {
+        } else {
           timer.cancel();
         }
       });
     });
   }
-
 
   @override
   void dispose() {
@@ -75,7 +72,6 @@ class _ItemAuctionNewState extends State<ItemAuctionNew> {
         time.minutes > 0 ||
         time.seconds > 0;
   }
-
 
   void _decrementTime(AuctionEndDate time) {
     if (time.seconds > 0) {
@@ -98,18 +94,21 @@ class _ItemAuctionNewState extends State<ItemAuctionNew> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        timer.cancel();
-        if (widget.item.status != "started") {
+        print('s  ${startTime.seconds}');
+        print("m ${startTime.minutes}");
+        if (startTime.seconds.toString() != '0' ||
+            startTime.minutes.toString() != '0') {
           showCustomFlash(
             message: "Cannot enter the auction".tr(),
             messageType: MessageType.Faild,
           );
-        } else if (widget.item.status == "started") {
+        } else if (startTime.seconds.toString() == '0' &&
+            startTime.minutes.toString() == '0') {
+          timer.cancel();
           ToWithFade(context, DetailsAuctions(slug: widget.item.id));
         }
       },
@@ -338,7 +337,10 @@ class _ItemAuctionNewState extends State<ItemAuctionNew> {
                                           CrossAxisAlignment.center,
                                       children: [
                                         DefaultText(
-                                          (_hasTimeLeft(startTime) ? startTime.hours : remainingTime.hours).toString(),
+                                          (_hasTimeLeft(startTime)
+                                                  ? startTime.hours
+                                                  : remainingTime.hours)
+                                              .toString(),
                                           fontSize: 15,
                                           fontWeight: FontWeight.w600,
                                           color: white,
@@ -358,7 +360,10 @@ class _ItemAuctionNewState extends State<ItemAuctionNew> {
                                           CrossAxisAlignment.center,
                                       children: [
                                         DefaultText(
-                                          (_hasTimeLeft(startTime) ? startTime.minutes : remainingTime.minutes).toString(),
+                                          (_hasTimeLeft(startTime)
+                                                  ? startTime.minutes
+                                                  : remainingTime.minutes)
+                                              .toString(),
                                           fontSize: 15,
                                           fontWeight: FontWeight.w600,
                                           color: white,
@@ -378,7 +383,10 @@ class _ItemAuctionNewState extends State<ItemAuctionNew> {
                                           CrossAxisAlignment.center,
                                       children: [
                                         DefaultText(
-                                          (_hasTimeLeft(startTime) ? startTime.seconds : remainingTime.seconds).toString(),
+                                          (_hasTimeLeft(startTime)
+                                                  ? startTime.seconds
+                                                  : remainingTime.seconds)
+                                              .toString(),
                                           fontSize: 15,
                                           fontWeight: FontWeight.w600,
                                           color: white,

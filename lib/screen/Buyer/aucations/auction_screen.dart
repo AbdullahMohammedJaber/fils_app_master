@@ -226,7 +226,7 @@ class BannerShapePainter extends CustomPainter {
     path.moveTo(pA.dx, pA.dy);
 
     path.arcToPoint(
-      Offset(borderRadius, 0), // End of the arc
+      Offset(borderRadius, 0),
       radius: Radius.circular(borderRadius),
       clockwise: true,
     );

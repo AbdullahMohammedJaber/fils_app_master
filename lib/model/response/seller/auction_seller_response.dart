@@ -92,6 +92,7 @@ class AuctionSeller {
   dynamic sales;
   String status;
   Auction auctionPeriod;
+  Auction auction_start_date;
   Auction auctionTimeLeft;
   DateTime auctionEndDateString;
   bool isFavorite;
@@ -108,6 +109,7 @@ class AuctionSeller {
     required this.shopId,
     required this.shopSlug,
     required this.auction_type,
+    required this.auction_start_date,
     required this.shopName,
     required this.shopLogo,
     required this.name,
@@ -150,6 +152,7 @@ class AuctionSeller {
     status: json["status"],
     auctionPeriod: Auction.fromJson(json["auction_period"]),
     auctionTimeLeft: Auction.fromJson(json["auction_time_left"]),
+    auction_start_date: Auction.fromJson(json["auction_start_date"]),
     auctionEndDateString: DateTime.parse(json["auction_end_date_string"]),
     isFavorite: json["is_favorite"],
     assuranceFee: json["assurance_fee"],
@@ -179,6 +182,7 @@ class AuctionSeller {
     "status": status,
     "auction_period": auctionPeriod.toJson(),
     "auction_time_left": auctionTimeLeft.toJson(),
+    "auction_start_date": auction_start_date.toJson(),
     "auction_end_date_string": auctionEndDateString.toIso8601String(),
     "is_favorite": isFavorite,
     "assurance_fee": assuranceFee,

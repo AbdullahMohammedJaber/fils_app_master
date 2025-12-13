@@ -147,10 +147,10 @@ class _DetailsProductScreenState extends State<DetailsProductScreen> {
                                         messageType: MessageType.Faild,
                                       );
                                     } else {
-                                      store.functionAddCart(details: details);
+                                      store.functionAddCart(id: details.id);
                                     }
                                   } else {
-                                    store.functionAddCart(details: details);
+                                    store.functionAddCart(id: details.id);
                                   }
                                 } else {
                                   showDialogAuth(context);
@@ -194,10 +194,10 @@ class _DetailsProductScreenState extends State<DetailsProductScreen> {
                                                messageType: MessageType.Faild,
                                              );
                                            } else {
-                                             store.functionAddCart(details: details);
+                                             store.functionAddCart(id: details.id);
                                            }
                                          } else {
-                                           store.functionAddCart(details: details);
+                                           store.functionAddCart(id: details.id);
                                          }
 
                                        }else{

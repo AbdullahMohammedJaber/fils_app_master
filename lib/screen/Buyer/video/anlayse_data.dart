@@ -171,7 +171,7 @@ class _PositionAnalyzeState extends State<PositionAnalyze> {
 }
 
 Widget positionTitle(Reels data, BuildContext context, dynamic index) {
-  return Consumer<VideoController>(
+  return Consumer<ReelsProvider>(
     builder: (context, app, child) {
       return Positioned(
         bottom: 50,
@@ -185,7 +185,7 @@ Widget positionTitle(Reels data, BuildContext context, dynamic index) {
                 DefaultText('@${data.shopName}', color: white),
                 GestureDetector(
                   onTap: () {
-                    app.stopVideo(index);
+                      app.pauseVideoAtIndex(index);
                     if (data.isAuction == 1) {
                       ToWithFade(context, DetailsAuctions(slug: data.id));
                     } else {
@@ -355,17 +355,17 @@ void _showShareBottomSheet(BuildContext context, Reels reel) {
                   label: "Download".tr(),
                   onTap: () {
                     Navigator.pop(context);
-                    context.read<VideoController>().saveNetworkVideoFile();
+                    context.read<ReelsProvider>().saveNetworkVideoFile();
                   },
                 ),
-                /* _buildShareOption(
+                _buildShareOption(
                   context,
                   icon: "report.svg",
                   label: "Report".tr(),
                   onTap: () {
                     Navigator.pop(context);
                   },
-                ),*/
+                ),
               ],
             ),
           ),

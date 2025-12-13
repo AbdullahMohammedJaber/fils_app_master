@@ -92,7 +92,7 @@ class ItemCategoryHome extends StatelessWidget {
                 return GestureDetector(
                   onTap: () async{
                     if (index == 0) {
-                      ToWithFade(context, const VideoScreen());
+                      ToWithFade(context, const ReelsScreen());
                     } else if (index == 1) {
                       ToWithFade(context, StoreScreen());
                     } else if (index == 2) {

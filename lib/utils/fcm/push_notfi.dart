@@ -3,13 +3,24 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
+import 'package:fils/controller/provider/cart_notifire.dart';
+import 'package:fils/controller/provider/store_notofire.dart';
+import 'package:fils/utils/NavigatorObserver/Navigator_observe.dart';
+import 'package:fils/utils/enum/message_type.dart';
+import 'package:fils/utils/route/route.dart';
 import 'package:fils/utils/storage/storage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fils/utils/global_function/printer.dart';
+import 'package:path/path.dart';
+import 'package:provider/provider.dart';
 
+import '../../screen/general/root_app.dart';
 import '../const.dart';
+import '../message_app/show_flash_message.dart';
 
 pluginIni() {
   var initializationSettingsAndroid = const AndroidInitializationSettings(
@@ -105,11 +116,22 @@ Future<dynamic> onSilent(String payload) async {
   printGreen("Get Message In Notification ------------>");
 
   Map map = await jsonDecode(payload) as Map<String, dynamic>;
-  // dynamic id = dynamic.parse(map['target_id'].toString()??'0');
 
-  switch (map['msgType'].toString()) {
-    case "2":
-      print("Get Message In Notification ------------>");
+  String product_id = map['product_id'].toString();
+  String user_id = map['user_id'].toString();
+
+  switch (map['notification_type_id'].toString()) {
+    case "30":
+      if(user_id==getUser()!.user!.id){
+        showCustomFlash(message: "You won the auction and won the product.\n Now you have to pay by going to the Cart and paying through it"
+            .tr(), messageType: MessageType.Success);
+      }
+
+      toRemoveAll(
+        NavigationService.navigatorKey.currentContext!,
+        RootAppScreen(),
+      );
+
       break;
   }
 
