@@ -122,15 +122,20 @@ Future<dynamic> onSilent(String payload) async {
 
   switch (map['notification_type_id'].toString()) {
     case "30":
-      if(user_id==getUser()!.user!.id){
-        showCustomFlash(message: "You won the auction and won the product.\n Now you have to pay by going to the Cart and paying through it"
-            .tr(), messageType: MessageType.Success);
+      if (user_id == getUser()!.user!.id) {
+        showCustomFlash(
+          message:
+              "You won the auction and won the product.\n Now you have to pay by going to the Cart and paying through it"
+                  .tr(),
+          messageType: MessageType.Success,
+        );
       }
-
-      toRemoveAll(
-        NavigationService.navigatorKey.currentContext!,
-        RootAppScreen(),
-      );
+      Future.delayed(Duration(seconds: 3), () {
+        toRemoveAll(
+          NavigationService.navigatorKey.currentContext!,
+          RootAppScreen(),
+        );
+      });
 
       break;
   }

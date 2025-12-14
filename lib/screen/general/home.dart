@@ -16,6 +16,7 @@ import 'package:fils/utils/storage/storage.dart';
 import 'package:fils/widget/item_search.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 import '../auth/login/screen/login_screen.dart';
 
@@ -97,8 +98,32 @@ class HomeScreen extends StatelessWidget {
 
                     isLogin()
                         ? getUser()!.user!.type == "customer"
-                            ? HomeBuyer(homeNotifire: homeNotifire!)
-                            : HomeSeller()
+                            ? ShowCaseWidget(
+                              enableAutoScroll: true,
+                              blurValue: 3,
+
+                              builder: (context) {
+                                return Builder(
+                                  builder: (context) {
+                                    return HomeBuyer(
+                                      homeNotifire: homeNotifire!,
+                                    );
+                                  },
+                                );
+                              },
+                            )
+                            : ShowCaseWidget(
+                              enableAutoScroll: true,
+                              blurValue: 3,
+
+                              builder: (context) {
+                                return Builder(
+                                  builder: (context) {
+                                    return HomeSeller();
+                                  },
+                                );
+                              },
+                            )
                         : HomeBuyer(homeNotifire: homeNotifire!),
                   ],
                 ),

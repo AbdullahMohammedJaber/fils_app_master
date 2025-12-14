@@ -218,7 +218,7 @@ class _VideoScreenState extends State<VideoScreen> {
 import 'package:fils/screen/Buyer/video/anlayse_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+
 import 'package:video_player/video_player.dart';
 import '../../../controller/provider/vedio_notifire.dart';
 
@@ -232,55 +232,58 @@ class ReelsScreen extends StatefulWidget {
 class _ReelsScreenState extends State<ReelsScreen> {
   @override
   void initState() {
+
     super.initState();
-    context.read<ReelsProvider>().fetchReelsApi(isRefresh: true);
   }
 
   @override
   void dispose() {
-    context.read<ReelsProvider>().disposeAll();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ReelsProvider>(
-      builder: (_, p, __) {
-        return Scaffold(
-          body: PageView.builder(
-            controller: p.pageController,
-            scrollDirection: Axis.vertical,
-            itemCount: p.videoUrls.length,
-            onPageChanged: p.onPageChanged,
-            itemBuilder: (_, index) {
-              final controller = p.getController(index);
+    return ChangeNotifierProvider(
+      create: (context) => ReelsProvider(),
+      child: Consumer<ReelsProvider>(
+        builder: (_, p, __) {
+          return Scaffold(
+            body: PageView.builder(
+              controller: p.pageController,
+              scrollDirection: Axis.vertical,
+              itemCount: p.videoUrls.length,
+              onPageChanged: p.onPageChanged,
+              itemBuilder: (_, index) {
+                final controller = p.getController(index);
 
-              if (controller == null || !controller.value.isInitialized) {
-                return const Center(child: CircularProgressIndicator());
-              }
+                if (controller == null || !controller.value.isInitialized) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-              return Stack(
-                children: [
-                  SizedBox.expand(
-                    child: FittedBox(
-                      fit: BoxFit.cover,
-                      child: SizedBox(
-                        width: controller.value.size.width,
-                        height: controller.value.size.height,
-                        child: VideoPlayer(controller),
+                return Stack(
+                  children: [
+                    SizedBox.expand(
+                      child: FittedBox(
+                        fit: BoxFit.cover,
+                        child: SizedBox(
+                          width: controller.value.size.width,
+                          height: controller.value.size.height,
+                          child: VideoPlayer(controller),
+                        ),
                       ),
                     ),
-                  ),
-                  if (p.videoUrls[index].shopName != null)
-                    PositionAnalyze(data: p.videoUrls[index]),
-                  if (p.videoUrls[index].shopName != null)
-                    positionTitle(p.videoUrls[index], context, index),
-                ],
-              );
-            },
-          ),
-        );
-      },
+                    if (p.videoUrls[index].shopName != null)
+                      PositionAnalyze(data: p.videoUrls[index]),
+                    if (p.videoUrls[index].shopName != null)
+                      positionTitle(p.videoUrls[index], context, index),
+                  ],
+                );
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 }

@@ -77,7 +77,7 @@ void main() async {
         Locale('de', ''),
       ],
       child: DevicePreview(
-          enabled: true,
+          enabled: false,
           builder: (context) => RestartWidget(child: MyApp())),
     ),
   );
@@ -254,7 +254,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => AuthNotifire()),
         ChangeNotifierProvider(create: (context) => UserNotifier()),
         ChangeNotifierProvider(create: (context) => AuctionNotifier()),
-        ChangeNotifierProvider(create: (context) => ReelsProvider()),
+
         ChangeNotifierProvider(create: (context) => WalletNotifire()),
         ChangeNotifierProvider(create: (context) => FloatingButtonController()),
         ChangeNotifierProvider(create: (context) => ProductNotifire()),

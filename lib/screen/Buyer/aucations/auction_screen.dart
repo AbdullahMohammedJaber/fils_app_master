@@ -46,7 +46,7 @@ class AuctionScreen extends StatelessWidget {
                   children: [
                     SizedBox(
                       height: 120,
-                      width: width,
+                      width: double.infinity,
                       child: CustomPaint(
                         painter: BannerShapePainter(
                           shapeColor: zaherH,

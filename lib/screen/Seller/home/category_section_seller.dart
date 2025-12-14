@@ -12,31 +12,55 @@ import 'package:fils/utils/const.dart';
 import 'package:fils/utils/route/route.dart';
 import 'package:fils/utils/theme/color_manager.dart';
 import 'package:fils/widget/defulat_text.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 import '../../../utils/enum/message_type.dart';
 import '../../../utils/message_app/show_flash_message.dart';
 import '../reports/reports_screen.dart';
 
-class CategorySectionSeller extends StatelessWidget {
+class CategorySectionSeller extends StatefulWidget {
   CategorySectionSeller({super.key});
 
+  @override
+  State<CategorySectionSeller> createState() => _CategorySectionSellerState();
+}
+
+class _CategorySectionSellerState extends State<CategorySectionSeller> {
+  late List<GlobalKey> showcaseKeys;
   List<CustomButton> lista = [
     CustomButton(
       label: 'Wallet'.tr(),
       color: secondColor.withOpacity(0.2),
       path: "assets/icons/wallet_seller.svg",
+      dec: "You can easily deposit and withdraw your profits and sales from the wallet section.".tr(),
     ),
     CustomButton(
       label: 'Subscriptions'.tr(),
       color: purpleColor.withOpacity(0.2),
       path: "assets/icons/subscription.svg",
+      dec: "As a seller, you must subscribe to a package to enjoy the app's features, such as adding products and auctions. Choose the package according to your specific needs.".tr(),
     ),
     CustomButton(
       label: 'Reports'.tr(),
       color: Colors.orange.withOpacity(0.2),
       path: "assets/icons/subscription.svg",
+      dec: "You can download your sales and purchase reports from here to easily see your incoming and outgoing transactions in your account.".tr(),
     ),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    showcaseKeys = List.generate(lista.length, (index) => GlobalKey());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final bool isDone = getShowCaseHomeS();
+
+      if (!isDone) {
+        ShowCaseWidget.of(context).startShowCase(showcaseKeys);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,38 +80,61 @@ class CategorySectionSeller extends StatelessWidget {
                   return Expanded(
                     child: Row(
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            if (index == 1) {
-                              ToWithFade(
-                                context,
-                                const SubscriptionsScreen(typeStore: 0),
-                              );
-                            } else if (index == 0) {
-                              if (getAllShop().id == null) {
-                                showCustomFlash(
-                                  message: "Please Select your Shop".tr(),
-                                  messageType: MessageType.Faild,
-                                );
-                              } else {
-                                ToWithFade(context, const WalletScreen());
-                              }
-                            } else if (index == 2) {
-                              ToWithFade(context, const ReportsScreen());
-                            }
+                        Showcase(
+                          key: showcaseKeys[index],
+                          title: lista[index].label,
+                          description: lista[index].dec,
+                          overlayOpacity: 0.7,
+                          descriptionAlignment: Alignment.center,
+                          scaleAnimationAlignment: Alignment.topCenter,
+                          tooltipPosition: TooltipPosition.right,
+                          showArrow: false,
+                          tooltipActions: [
+                            TooltipActionButton(
+                              type: TooltipDefaultActionType.skip,
+                              backgroundColor: primaryColor,
+                              name: "Skip".tr(),
+                              onTap: () {
+                                ShowCaseWidget.of(context).dismiss();
+                                setShowCaseHomeS(true);
+                              },
+                              textStyle: TextStyle(
+                                color: white,
+                                fontFamily: "Almarai",
+                              ),
+                            ),
+                          ],
+                          onToolTipClick: () {
+                            ShowCaseWidget.of(context).next();
+                            setShowCaseHomeS(true);
                           },
-                          child:
-                              index == 1
-                                  ? CustomButton(
-                                    label: lista[index].label,
-                                    color: lista[index].color,
-                                    path: lista[index].path,
-                                  )
-                                  : CustomButton(
-                                    label: lista[index].label,
-                                    color: lista[index].color,
-                                    path: lista[index].path,
-                                  ),
+                          child: GestureDetector(
+                            onTap: () {
+                              if (index == 1) {
+                                ToWithFade(
+                                  context,
+                                  const SubscriptionsScreen(typeStore: 0),
+                                );
+                              } else if (index == 0) {
+                                if (getAllShop().id == null) {
+                                  showCustomFlash(
+                                    message: "Please Select your Shop".tr(),
+                                    messageType: MessageType.Faild,
+                                  );
+                                } else {
+                                  ToWithFade(context, const WalletScreen());
+                                }
+                              } else if (index == 2) {
+                                ToWithFade(context, const ReportsScreen());
+                              }
+                            },
+                            child: CustomButton(
+                              label: lista[index].label,
+                              color: lista[index].color,
+                              path: lista[index].path,
+                              dec: lista[index].dec,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -103,15 +150,17 @@ class CategorySectionSeller extends StatelessWidget {
 }
 
 class CustomButton extends StatelessWidget {
-  final String? label;
-  final Color? color;
-  final String? path;
+  final String label;
+  final Color color;
+  final String path;
+  final String dec;
 
   const CustomButton({
     super.key,
     required this.label,
     required this.color,
     required this.path,
+    required this.dec,
   });
 
   @override

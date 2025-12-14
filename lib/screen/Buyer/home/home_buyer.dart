@@ -26,6 +26,7 @@ import 'package:fils/utils/enum/request_type.dart';
 import 'package:fils/utils/http/get_object_widget.dart';
 import 'package:fils/utils/http/service.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 import '../../../controller/provider/admob_ads_provider.dart';
 import '../../../utils/storage/storage.dart';
@@ -51,11 +52,6 @@ class _HomeBuyerState extends State<HomeBuyer> {
       final homeNotifier = Provider.of<HomeNotifire>(context, listen: false);
       homeNotifier.getRequestByuer();
     });
-   /* Future.delayed(Duration.zero, () {
-      NavigationService.navigatorKey.currentContext!.read<BannerAdsProvider>().initBannerAd(
-        "ca-app-pub-9467556641753058/5632911723",
-      );
-    });*/
   }
 
   @override
@@ -81,16 +77,15 @@ class _HomeBuyerState extends State<HomeBuyer> {
                   children: [
                     SizedBox(height: heigth * 0.01),
                     GestureDetector(
-                        onTap: (){
-
-                            toUrl('http://wibex.io');
-
-                        },
-                        child: Image.asset("assets/images/web.png")),
+                      onTap: () {
+                        toUrl('http://wibex.io');
+                      },
+                      child: Image.asset("assets/images/web.png"),
+                    ),
                     SizedBox(height: heigth * 0.01),
-                  /*  BannerAdWidget(),
-                    SizedBox(height: heigth * 0.01),*/
 
+                    /*  BannerAdWidget(),
+                    SizedBox(height: heigth * 0.01),*/
                     ItemCategoryHome(homeNotifire: widget.homeNotifire),
                     SizedBox(height: heigth * 0.04),
                     ItemProductHome(data: data),
@@ -101,9 +96,14 @@ class _HomeBuyerState extends State<HomeBuyer> {
                     SizedBox(height: heigth * 0.04),
                     ItemShopHome(data: data),
                     SizedBox(height: heigth * 0.04),
-                    BannerStore(onClick: (){
-                      ToWithFade(NavigationService.navigatorKey.currentContext!, const AllProductScreen());
-                    },),
+                    BannerStore(
+                      onClick: () {
+                        ToWithFade(
+                          NavigationService.navigatorKey.currentContext!,
+                          const AllProductScreen(),
+                        );
+                      },
+                    ),
                     SizedBox(height: heigth * 0.02),
 
                     ItemRelatedProductHome(data: data),

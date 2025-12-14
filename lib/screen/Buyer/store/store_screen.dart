@@ -107,7 +107,7 @@ class _StoreScreenState extends State<StoreScreen> {
                   children: [
                     SizedBox(
                       height: 120,
-                      width: width,
+                      width: double.infinity,
                       child: CustomPaint(
                         painter: BannerShapePainter(
                           shapeColor: orangeH,

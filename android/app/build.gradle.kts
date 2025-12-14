@@ -38,7 +38,7 @@ android {
 
         minSdk = 24
         targetSdk = 35
-        versionCode = 89
+        versionCode = 92
         versionName = flutter.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

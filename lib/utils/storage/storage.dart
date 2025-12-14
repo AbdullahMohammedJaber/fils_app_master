@@ -220,11 +220,26 @@ PackageInfoResponse getPackageInfo() {
   return PackageInfoResponse.fromJson(GetStorage().read("PackageInfoResponse"));
 }
 
-
-setTimeZoon(String zoon){
+setTimeZoon(String zoon) {
   GetStorage().write("zoon", zoon);
 }
 
-getTimeZoon(){
+getTimeZoon() {
   return GetStorage().read("zoon");
+}
+
+setShowCaseHomeB(bool set) {
+  GetStorage().write("set", set);
+}
+
+bool getShowCaseHomeB() {
+  return GetStorage().read("set")??false;
+}
+
+setShowCaseHomeS(bool set) {
+  GetStorage().write("setS", set);
+}
+
+bool getShowCaseHomeS() {
+  return GetStorage().read("setS")??false;
 }

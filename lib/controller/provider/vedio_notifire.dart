@@ -244,8 +244,6 @@ class VideoController extends ChangeNotifier {
 }
 */
 
-
-
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -264,6 +262,10 @@ import '../../utils/http/http_helper.dart';
 import '../../utils/message_app/show_flash_message.dart';
 
 class ReelsProvider extends ChangeNotifier {
+  ReelsProvider() {
+    fetchReelsApi(isRefresh: true);
+  }
+
   // =============================
   // DATA
   // =============================
@@ -294,7 +296,7 @@ class ReelsProvider extends ChangeNotifier {
       currentPage = 1;
       hasMore = true;
       videoUrls.clear();
-      _disposeControllers();
+      //_disposeControllers();
     }
 
     try {
@@ -401,6 +403,7 @@ class ReelsProvider extends ChangeNotifier {
     _disposeControllers();
     pageController.dispose();
   }
+
   dynamic progress = 0;
   String progressText = "0 %";
 
