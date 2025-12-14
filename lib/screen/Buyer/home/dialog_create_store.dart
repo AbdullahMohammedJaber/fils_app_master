@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fils/utils/NavigatorObserver/Navigator_observe.dart';
 import 'package:fils/utils/global_function/loading_widget.dart';
 import 'package:fils/utils/storage/storage.dart';
 import 'package:flutter/material.dart';
@@ -156,7 +157,7 @@ void showStoreLoginDialog(BuildContext context) {
                           );
 
                           toRemoveAll(
-                            context,
+                            NavigationService.navigatorKey.currentContext!,
                             VirefyCodeSignup(
                               email: getUser()!.user!.email,
                               name: storeNameController.text,

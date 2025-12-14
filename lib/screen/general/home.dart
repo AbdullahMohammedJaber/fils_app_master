@@ -124,7 +124,20 @@ class HomeScreen extends StatelessWidget {
                                 );
                               },
                             )
-                        : HomeBuyer(homeNotifire: homeNotifire!),
+                        : ShowCaseWidget(
+                      enableAutoScroll: true,
+                      blurValue: 3,
+
+                      builder: (context) {
+                        return Builder(
+                          builder: (context) {
+                            return HomeBuyer(
+                              homeNotifire: homeNotifire!,
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),

@@ -140,8 +140,18 @@ class _ItemCategoryHomeState extends State<ItemCategoryHome> {
                   showArrow: false,
                   tooltipActions: [
                     TooltipActionButton(
-                      type: TooltipDefaultActionType.skip,
+                      type: TooltipDefaultActionType.next,
                       backgroundColor: primaryColor,
+                      name: "Next".tr(),
+                      onTap: () {
+                        ShowCaseWidget.of(context).next();
+                        setShowCaseHomeB(true);
+                      },
+                      textStyle: TextStyle(color: white, fontFamily: "Almarai"),
+                    ),
+                    TooltipActionButton(
+                      type: TooltipDefaultActionType.skip,
+                      backgroundColor: error,
                       name: "Skip".tr(),
                       onTap: () {
                         ShowCaseWidget.of(context).dismiss();
