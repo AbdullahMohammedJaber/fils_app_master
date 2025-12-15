@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fils/screen/Buyer/OpenMarket/User_Classifed_Products/screen/all_haraj_in_category.dart';
 import 'package:fils/screen/Buyer/OpenMarket/User_Classifed_Products/screen/header_details_product_open_market.dart';
 import 'package:fils/utils/global_function/loading_widget.dart';
 import 'package:fils/utils/http/http_helper.dart';
@@ -170,6 +171,7 @@ class DetailsOpenMarket extends StatelessWidget {
                         closeAllLoading();
                         if (!json.containsKey("errorMessage")) {
                           marketOpenController.update();
+                          haraj.update();
                           Navigator.pop(context);
                         }
                       },

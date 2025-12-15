@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:fils/controller/provider/theme_notifire.dart';
 import 'package:fils/utils/const.dart';
+import 'package:fils/utils/storage/storage.dart';
+import 'package:fils/widget/dialog_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -26,14 +28,13 @@ class CurvedBottomNavigationBar extends StatelessWidget {
 
     double width = MediaQuery.of(context).size.width;
 
-    return Consumer2<AppNotifire , ThemeProvider>(
-      builder: (context , root , theme , child) {
+    return Consumer2<AppNotifire, ThemeProvider>(
+      builder: (context, root, theme, child) {
         return SizedBox(
           height: 80,
           child: Stack(
             alignment: Alignment.bottomCenter,
             children: [
-
               CustomPaint(
                 size: Size(width, 80),
                 painter: NavBarPainter(
@@ -41,11 +42,10 @@ class CurvedBottomNavigationBar extends StatelessWidget {
                   itemCount: items.length,
                   backgroundColor: backgroundColor,
                   textDirection: Directionality.of(context),
-
                 ),
               ),
 
-               Container(
+              Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey.shade300),
                 ),
@@ -58,7 +58,17 @@ class CurvedBottomNavigationBar extends StatelessWidget {
                     final label = items[index]['title'];
 
                     return GestureDetector(
-                      onTap: () => provider.onClickBottomNavigationBar(index),
+                      onTap: () {
+                        if (index == 1) {
+                          if (isLogin()) {
+                            provider.onClickBottomNavigationBar(index);
+                          } else {
+                            showDialogAuth(context);
+                          }
+                        } else {
+                          provider.onClickBottomNavigationBar(index);
+                        }
+                      },
                       child: Container(
                         color: Colors.transparent,
                         width: width * 0.23,
@@ -95,7 +105,8 @@ class CurvedBottomNavigationBar extends StatelessWidget {
                                       : null,
                               child: SvgPicture.asset(
                                 iconPath,
-                                color: isSelected ? Colors.white : inactiveColor,
+                                color:
+                                    isSelected ? Colors.white : inactiveColor,
                                 height: isSelected ? 28 : 25,
                               ),
                             ),
@@ -121,11 +132,10 @@ class CurvedBottomNavigationBar extends StatelessWidget {
             ],
           ),
         );
-      }
+      },
     );
   }
 }
-
 
 class NavBarPainter extends CustomPainter {
   final double selectedIndex;

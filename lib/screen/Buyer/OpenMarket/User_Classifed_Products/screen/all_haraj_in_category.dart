@@ -6,6 +6,7 @@ import 'package:fils/screen/Buyer/OpenMarket/User_Classifed_Products/screen/deta
 import 'package:fils/utils/const.dart';
 import 'package:fils/utils/enum/request_type.dart';
 import 'package:fils/utils/global_function/loading_widget.dart';
+import 'package:fils/utils/global_function/update_controller.dart';
 import 'package:fils/utils/http/gridview_pagination_request.dart';
 import 'package:fils/utils/route/route.dart';
 import 'package:fils/utils/storage/storage.dart';
@@ -14,7 +15,7 @@ import 'package:fils/widget/defulat_text.dart';
 import 'package:fils/widget/grid_view_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
+ UpdateController haraj = UpdateController();
 class AllProductHarajPyCategoryId extends StatelessWidget {
   int categoryId;
   AllProductHarajPyCategoryId(this.categoryId, {super.key});
@@ -42,6 +43,7 @@ class AllProductHarajPyCategoryId extends StatelessWidget {
           child: InfiniteScrollGridView(
             endpoint: "classified/public",
             shwrinkWrap: true,
+            updateController: haraj,
             data: {"category_id": categoryId},
             cacheKey: "classified/public",
             parseItem: (json) => MarketOpenResponse.fromJson(json),
