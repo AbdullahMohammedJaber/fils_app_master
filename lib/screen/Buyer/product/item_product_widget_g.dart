@@ -103,7 +103,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                                 var json = await NetworkHelper.sendRequest(
                                   requestType: RequestType.get,
                                   endpoint:
-                                      "wishlists-remove-product/${widget.productListModel!.id}",
+                                      "wishlists-remove-product/${widget.productListModel!.id}?is_auction=${widget.isAuction ? "1" : "0"}",
                                 );
                                 if (!json.containsKey("errorMessage")) {
                                   if (updateControllerFav != null) {

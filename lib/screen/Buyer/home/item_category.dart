@@ -27,8 +27,8 @@ import 'dialog_create_store.dart';
 
 class ItemCategoryHome extends StatefulWidget {
   HomeNotifire? homeNotifire;
-
-  ItemCategoryHome({super.key, this.homeNotifire});
+  GlobalKey? keyG;
+  ItemCategoryHome({super.key, this.homeNotifire , this.keyG});
 
   @override
   State<ItemCategoryHome> createState() => _ItemCategoryHomeState();
@@ -46,7 +46,7 @@ class _ItemCategoryHomeState extends State<ItemCategoryHome> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final bool isDone = getShowCaseHomeB();
 
-      if (!isDone) {
+      if (isDone) {
         ShowCaseWidget.of(context).startShowCase(showcaseKeys);
       }
     });
@@ -104,6 +104,7 @@ class _ItemCategoryHomeState extends State<ItemCategoryHome> {
   @override
   Widget build(BuildContext context) {
     return Padding(
+      key: widget.keyG,
       padding: const EdgeInsetsDirectional.only(start: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,6 +119,7 @@ class _ItemCategoryHomeState extends State<ItemCategoryHome> {
           Container(
             alignment: AlignmentDirectional.centerStart,
             child: GridView.builder(
+
               padding: EdgeInsets.symmetric(horizontal: width * 0.03),
               physics: const BouncingScrollPhysics(),
               shrinkWrap: true,

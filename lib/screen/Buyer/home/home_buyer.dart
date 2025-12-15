@@ -45,13 +45,57 @@ class HomeBuyer extends StatefulWidget {
 }
 
 class _HomeBuyerState extends State<HomeBuyer> {
+  var scrollController = ScrollController();
+  final GlobalKey shopKey = GlobalKey();
+  final GlobalKey scrollViewKey = GlobalKey();
+  void scrollDown() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final targetContext = shopKey.currentContext;
+      final scrollContext = scrollViewKey.currentContext;
+
+      if (targetContext == null || scrollContext == null) return;
+
+      final RenderBox targetBox = targetContext.findRenderObject() as RenderBox;
+      final RenderBox scrollBox = scrollContext.findRenderObject() as RenderBox;
+
+      // موقع العنصر بالنسبة لإحداثيات الشاشة (global)
+      final targetGlobal = targetBox.localToGlobal(Offset.zero);
+
+      // نحول الموقع العالمي إلى إحداثيات محلية لصندوق الـ scroll
+      final targetLocalToScroll = scrollBox.globalToLocal(targetGlobal);
+
+      // نضيف الـ offset الحالي للسكرول للحصول على القيمة النهائية المراد التنقل إليها
+      double targetOffset = scrollController.offset + targetLocalToScroll.dy;
+
+      // ضبط لتجنّب القيم السالبة أو تجاوز الحد الأعلى
+      if (targetOffset < scrollController.position.minScrollExtent) {
+        targetOffset = scrollController.position.minScrollExtent;
+      } else if (targetOffset > scrollController.position.maxScrollExtent) {
+        targetOffset = scrollController.position.maxScrollExtent;
+      }
+
+      scrollController.animateTo(
+        targetOffset,
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final homeNotifier = Provider.of<HomeNotifire>(context, listen: false);
       homeNotifier.getRequestByuer();
     });
+
+  }
+  @override
+  void dispose() {
+
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -61,6 +105,7 @@ class _HomeBuyerState extends State<HomeBuyer> {
     });
     return Consumer2<HomeNotifire, AppNotifire>(
       builder: (context, controller, app, child) {
+        scrollDown();
         return Expanded(
           child: CustomRequestWidget(
             cacheKey: "home_response",
@@ -72,6 +117,8 @@ class _HomeBuyerState extends State<HomeBuyer> {
               }
 
               return SingleChildScrollView(
+                key: scrollViewKey,
+                controller: scrollController,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -86,7 +133,10 @@ class _HomeBuyerState extends State<HomeBuyer> {
 
                     /*  BannerAdWidget(),
                     SizedBox(height: heigth * 0.01),*/
-                    ItemCategoryHome(homeNotifire: widget.homeNotifire),
+                    ItemCategoryHome(
+                      homeNotifire: widget.homeNotifire,
+                      keyG: shopKey,
+                    ),
                     SizedBox(height: heigth * 0.04),
                     ItemProductHome(data: data),
                     SizedBox(height: heigth * 0.01),
