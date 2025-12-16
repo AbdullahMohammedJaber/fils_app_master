@@ -46,7 +46,7 @@ class _ItemCategoryHomeState extends State<ItemCategoryHome> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final bool isDone = getShowCaseHomeB();
 
-      if (isDone) {
+      if (!isDone) {
         ShowCaseWidget.of(context).startShowCase(showcaseKeys);
       }
     });

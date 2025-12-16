@@ -113,20 +113,22 @@ class HomeNotifire extends ChangeNotifier {
           launchAppStore();
         }
       }
-    } else if (Platform.isIOS) {
+    }
+    if (Platform.isIOS) {
       final snapshot = await databaseRef.child("update").get();
 
       if (snapshot.exists) {
         final data = snapshot.value as Map;
 
-        bool hasUpdate = data['hasUpdate'] ?? false;
-        String currentVersion = data['currentVersionIos'] ?? '';
-        bool isShow = data['isShowiOs'];
-
-        printBlue("Has Update: $hasUpdate");
-        printBlue("Current Version: $currentVersion");
+        bool hasUpdateIos = data['hasUpdate'] ?? false;
+        String currentVersionIos = data['currentVersionIos'] ?? '';
+        bool isShowIos = data['isShowiOs'];
+        printBlue("Has Update: $hasUpdateIos");
+        printBlue("Current Version: $currentVersionIos");
         printBlue("info Version: $info");
-        if (currentVersion != info && hasUpdate == false && isShow == true) {
+        if (currentVersionIos != info &&
+            hasUpdateIos == false &&
+            isShowIos == true) {
           showCupertinoDialog(
             context: NavigationService.navigatorKey.currentContext!,
 
@@ -177,7 +179,9 @@ class HomeNotifire extends ChangeNotifier {
               );
             },
           );
-        } else if (currentVersion != info && hasUpdate && isShow == true) {
+        } else if (currentVersionIos != info &&
+            hasUpdateIos &&
+            isShowIos == true) {
           launchAppStore();
         }
       }
