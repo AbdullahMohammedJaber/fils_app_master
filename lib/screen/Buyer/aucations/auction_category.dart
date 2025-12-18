@@ -105,8 +105,15 @@ class _AuctionCategoryState extends State<AuctionCategory> {
                             updateController: updateControllerAuction,
                             parseItem: (json) => Datum.fromJson(json),
                             itemBuilder: (BuildContext context, Datum item) {
+                              if(item.auctionEndDate.minutes==0&&
+                                  item.auctionEndDate.seconds==0&&
+                                  item.auctionEndDate.hours==0
+                              ){
+                                return SizedBox();
+                              }else{
+                                return ItemAuctionNew(item: item);
 
-                              return ItemAuctionNew(item: item);
+                              }
                             },
                           ),
                         ),

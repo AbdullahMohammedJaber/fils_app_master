@@ -32,7 +32,7 @@ ThemeData getApplicationThemeDark() {
     // ripple effect color
     iconTheme: IconThemeData(color: primaryColor),
 
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: white,
       shadowColor: grey2,
       elevation: AppSize.s4,
@@ -95,7 +95,7 @@ ThemeData getApplicationThemeDark() {
         ),
       ),
     ),
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: TabBarThemeData(
       unselectedLabelColor: Colors.black,
       labelColor: white,
       unselectedLabelStyle: getLightStyle(

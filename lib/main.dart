@@ -77,7 +77,7 @@ void main() async {
         Locale('de', ''),
       ],
       child: DevicePreview(
-          enabled: false,
+          enabled: !kReleaseMode,
           builder: (context) => RestartWidget(child: MyApp())),
     ),
   );

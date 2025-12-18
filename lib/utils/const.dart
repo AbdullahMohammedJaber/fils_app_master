@@ -1,13 +1,11 @@
 // ignore_for_file: unused_local_variable
 
-import 'dart:convert';
 import 'dart:io';
-import 'package:http/http.dart' as http;
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fils/controller/provider/app_notifire.dart';
-import 'package:fils/main.dart';
-import 'package:fils/model/app/banners_model.dart';
+
 import 'package:fils/screen/splash_screen/splash_screen.dart';
 import 'package:fils/utils/NavigatorObserver/Navigator_observe.dart';
 import 'package:fils/utils/global_function/printer.dart';
@@ -88,7 +86,7 @@ changeDomain1() {
 }
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 Future<File?> uploadImage() async {
   final picker = ImagePicker();
@@ -183,7 +181,8 @@ loginFaceBook(BuildContext context, {required String userType}) async {
   }
 }
 
-Future<void> loginGoogle(BuildContext context, {
+Future<void> loginGoogle(
+  BuildContext context, {
   required String userType,
 }) async {
   try {
@@ -228,7 +227,7 @@ Future<void> loginGoogle(BuildContext context, {
     await setUserStorage(userResponse);
 
     final appNotifier =
-    NavigationService.navigatorKey.currentContext!.read<AppNotifire>();
+        NavigationService.navigatorKey.currentContext!.read<AppNotifire>();
     appNotifier.onClickBottomNavigationBar(0);
 
     toRemoveAll(context, const RootAppScreen());
@@ -303,14 +302,15 @@ resendCodeSignup(BuildContext context, String email) async {
   }
 }
 
-confirmCodeSignup(BuildContext context,
-    String code, {
-      String? password,
-      String? name,
-      String? mobile,
-      String? userType,
-      String? email,
-    }) async {
+confirmCodeSignup(
+  BuildContext context,
+  String code, {
+  String? password,
+  String? name,
+  String? mobile,
+  String? userType,
+  String? email,
+}) async {
   showBoatToast();
   final json = await NetworkHelper.sendRequest(
     requestType: RequestType.post,
@@ -327,7 +327,8 @@ confirmCodeSignup(BuildContext context,
   );
   closeAllLoading();
 
-  if (json.containsKey("errorMessage")) {} else {
+  if (json.containsKey("errorMessage")) {
+  } else {
     UserResponse userResponse = UserResponse.fromJson(json);
     showCustomFlash(
       message: userResponse.message,
@@ -355,8 +356,6 @@ confirmCodeSignup(BuildContext context,
   }
 }
 
-
-
 switchAccount(BuildContext context, String userType) async {
   showBoatToast();
   changeDomain1();
@@ -373,7 +372,7 @@ switchAccount(BuildContext context, String userType) async {
 
   if (!json.containsKey("errorMessage")) {
     SwitchAccountResponse switchAccountResponse =
-    SwitchAccountResponse.fromJson(json);
+        SwitchAccountResponse.fromJson(json);
     printGreenLong(switchAccountResponse.toJson().toString());
     setUserStorage(
       UserResponse(
@@ -419,7 +418,8 @@ List<String> bankList = [
   "بنك البحرين والكويت (BBK)",
 ];
 
-Future selectStringDialog(BuildContext context, {
+Future selectStringDialog(
+  BuildContext context, {
   required List<dynamic> list,
   required String title,
 }) {
@@ -435,22 +435,22 @@ Future selectStringDialog(BuildContext context, {
           height: heigth * 0.45,
           child: ListView(
             children:
-            list.map((e) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context, e);
-                  },
-                  child: DefaultText(
-                    e,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    textAlign: TextAlign.start,
-                  ),
-                ),
-              );
-            }).toList(),
+                list.map((e) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context, e);
+                      },
+                      child: DefaultText(
+                        e,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                  );
+                }).toList(),
           ),
         ),
       );

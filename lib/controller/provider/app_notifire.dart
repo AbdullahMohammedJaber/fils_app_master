@@ -1,7 +1,12 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fils/model/app/chat_bot_model.dart';
+import 'package:fils/model/response/rell_response.dart';
 import 'package:fils/screen/Seller/wallet/wallet_screen.dart';
 
 import 'package:fils/utils/NavigatorObserver/Navigator_observe.dart';
@@ -10,6 +15,7 @@ import 'package:fils/utils/enum/request_type.dart';
 import 'package:fils/utils/http/http_helper.dart';
 import 'package:fils/utils/route/route.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fils/screen/Buyer/favourite/favourait_screen.dart';
 import 'package:fils/screen/Buyer/wallet/funds_wallet.dart';
@@ -21,12 +27,15 @@ import 'package:fils/screen/general/home.dart';
 import 'package:fils/utils/enum/language_type.dart';
 import 'package:fils/utils/global_function/printer.dart';
 import 'package:fils/utils/storage/storage.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../screen/Buyer/cart/product_store/cart_screen.dart';
 import '../../screen/Buyer/profile/profile_screen.dart';
 import '../../screen/Buyer/store/store_screen.dart';
 import '../../screen/Seller/profile/profile_seller.dart';
 import '../../screen/plugins/maintenance_scren.dart';
+import '../../utils/enum/message_type.dart';
+import '../../utils/message_app/show_flash_message.dart';
 
 class AppNotifire extends ChangeNotifier {
   AppNotifire() {
@@ -301,5 +310,91 @@ class AppNotifire extends ChangeNotifier {
     _autoScrollTimer?.cancel();
 
     super.dispose();
+  }
+  dynamic progress = 0;
+  String progressText = "0 %";
+  Future<void> saveNetworkVideoFile(Reels url) async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      showCustomFlash(
+        message: "No internet connection available!".tr(),
+        messageType: MessageType.Faild,
+      );
+      return;
+    }
+
+    showModalBottomSheet(
+      context: NavigationService.navigatorKey.currentContext!,
+      isDismissible: false,
+      enableDrag: false,
+      builder: (_) {
+        return buildDownloadWidget();
+      },
+    );
+
+    try {
+      final fileUrl = url;
+      final String fileName = "${fileUrl.name}.mp4";
+      late String savePath;
+
+      if (Platform.isAndroid) {
+        final Directory? appDir = await getExternalStorageDirectory();
+        if (appDir == null) {
+          throw Exception("Unable to get storage directory.");
+        }
+
+        final Directory videoDir = Directory("${appDir.path}/Fils");
+        if (!videoDir.existsSync()) {
+          videoDir.createSync(recursive: true);
+        }
+
+        savePath = "${videoDir.path}/$fileName";
+      } else if (Platform.isIOS) {
+        final dir = await getApplicationDocumentsDirectory();
+        savePath = "${dir.path}/$fileName";
+      }
+
+      final response = await Dio().get(
+        fileUrl.videoLink,
+        options: Options(responseType: ResponseType.bytes),
+        onReceiveProgress: (count, total) {
+          progress = ((count / total) * 100).round();
+          progressText = "$progress %";
+          notifyListeners();
+          if (kDebugMode) {
+            print("Progress: $progressText");
+          }
+        },
+      );
+
+      final Uint8List videoBytes = Uint8List.fromList(response.data);
+      final file = File(savePath);
+      await file.writeAsBytes(videoBytes);
+
+      Navigator.of(NavigationService.navigatorKey.currentContext!).pop();
+
+      if (await file.exists()) {
+        showCustomFlash(
+          message: "Download Complete!".tr(),
+          messageType: MessageType.Success,
+        );
+      } else {
+        showCustomFlash(
+          message: "Saving failed!".tr(),
+          messageType: MessageType.Faild,
+        );
+      }
+    } catch (e) {
+      Navigator.of(NavigationService.navigatorKey.currentContext!).pop();
+      print("Error saving video: $e");
+      showCustomFlash(
+        message: "Download Failed!".tr(),
+        messageType: MessageType.Faild,
+      );
+    }
+
+    progress = 0;
+    progressText = "0 %";
+    notifyListeners();
   }
 }

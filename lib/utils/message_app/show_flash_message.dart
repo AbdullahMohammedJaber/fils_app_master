@@ -70,7 +70,7 @@ showCustomFlash({
 }
 
 Widget buildDownloadWidget() {
-  return Consumer<ReelsProvider>(builder: (context, app, s) {
+  return Consumer<AppNotifire>(builder: (context, app, s) {
     return Container(
       height: 120,
       padding: const EdgeInsets.all(16.0),

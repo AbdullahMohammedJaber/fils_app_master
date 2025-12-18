@@ -48,6 +48,7 @@ class _HomeBuyerState extends State<HomeBuyer> {
   var scrollController = ScrollController();
   final GlobalKey shopKey = GlobalKey();
   final GlobalKey scrollViewKey = GlobalKey();
+
   void scrollDown() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final targetContext = shopKey.currentContext;
@@ -58,16 +59,12 @@ class _HomeBuyerState extends State<HomeBuyer> {
       final RenderBox targetBox = targetContext.findRenderObject() as RenderBox;
       final RenderBox scrollBox = scrollContext.findRenderObject() as RenderBox;
 
-      // موقع العنصر بالنسبة لإحداثيات الشاشة (global)
       final targetGlobal = targetBox.localToGlobal(Offset.zero);
 
-      // نحول الموقع العالمي إلى إحداثيات محلية لصندوق الـ scroll
       final targetLocalToScroll = scrollBox.globalToLocal(targetGlobal);
 
-      // نضيف الـ offset الحالي للسكرول للحصول على القيمة النهائية المراد التنقل إليها
       double targetOffset = scrollController.offset + targetLocalToScroll.dy;
 
-      // ضبط لتجنّب القيم السالبة أو تجاوز الحد الأعلى
       if (targetOffset < scrollController.position.minScrollExtent) {
         targetOffset = scrollController.position.minScrollExtent;
       } else if (targetOffset > scrollController.position.maxScrollExtent) {
@@ -81,6 +78,7 @@ class _HomeBuyerState extends State<HomeBuyer> {
       );
     });
   }
+
   @override
   void initState() {
     super.initState();
@@ -89,11 +87,10 @@ class _HomeBuyerState extends State<HomeBuyer> {
       final homeNotifier = Provider.of<HomeNotifire>(context, listen: false);
       homeNotifier.getRequestByuer();
     });
-
   }
+
   @override
   void dispose() {
-
     scrollController.dispose();
     super.dispose();
   }
@@ -108,7 +105,6 @@ class _HomeBuyerState extends State<HomeBuyer> {
         scrollDown();
         return Expanded(
           child: CustomRequestWidget(
-            cacheKey: "home_response",
             buildResponse: (context, HomeResponse? data) {
               if (data!.data!.latestAuction != null) {
                 controller.insertWidgetListBanners(

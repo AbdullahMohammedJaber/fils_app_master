@@ -1,8 +1,14 @@
 // ignore_for_file: deprecated_member_use, must_be_immutable, unused_local_variable
 
+import 'dart:io';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fils/controller/provider/app_notifire.dart';
 import 'package:fils/utils/enum/message_type.dart';
 import 'package:fils/utils/message_app/show_flash_message.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fils/controller/provider/vedio_notifire.dart';
@@ -19,9 +25,12 @@ import 'package:fils/utils/storage/storage.dart';
 import 'package:fils/utils/theme/color_manager.dart';
 import 'package:fils/widget/defulat_text.dart';
 import 'package:fils/widget/dialog_auth.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../../utils/NavigatorObserver/Navigator_observe.dart';
 
 class PositionAnalyze extends StatefulWidget {
   Reels data;
@@ -225,6 +234,8 @@ Widget positionTitle(Reels data, BuildContext context, dynamic index) {
   );
 }
 
+
+
 void _showShareBottomSheet(BuildContext context, Reels reel) {
   showModalBottomSheet(
     context: context,
@@ -355,7 +366,7 @@ void _showShareBottomSheet(BuildContext context, Reels reel) {
                   label: "Download".tr(),
                   onTap: () {
                     Navigator.pop(context);
-                    context.read<ReelsProvider>().saveNetworkVideoFile();
+                    context.read<AppNotifire>().saveNetworkVideoFile(reel);
                   },
                 ),
                 _buildShareOption(

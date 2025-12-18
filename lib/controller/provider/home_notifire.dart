@@ -382,7 +382,7 @@ class HomeNotifire extends ChangeNotifier {
     );
   }
 
-  updateFcmToken() async {
+  Future<void> updateFcmToken() async {
     if (isLogin() && getFcmToken() != null) {
       changeDomain1();
       final json = await NetworkHelper.sendRequest(
@@ -397,8 +397,12 @@ class HomeNotifire extends ChangeNotifier {
   getRequestByuer() async {
     await getBalance();
 
-    Future.delayed(const Duration(seconds: 3), () => updateFcmToken());
-    await getBannersApp();
+    Future.delayed(const Duration(seconds: 3), () {
+      updateFcmToken().then((value) {
+        getBannersApp();
+      });
+    });
+
     if (isLogin()) {
       if (getUser()!.user!.phone!.isEmpty) {
         showCustomFlash(

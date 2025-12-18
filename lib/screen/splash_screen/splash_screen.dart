@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:http/http.dart'as http;
+import 'package:http/http.dart' as http;
 import 'package:fils/screen/language/select_language.dart';
 import 'package:fils/utils/NavigatorObserver/Navigator_observe.dart';
 import 'package:fils/utils/route/route.dart';
@@ -29,14 +29,30 @@ class _SplashScreenState extends State<SplashScreen>
 
   _init() async {
     Future.delayed(const Duration(seconds: 4), () async {
+      print(getTimeZoon());
+      if (getTimeZoon() == null ||
+          getTimeZoon() == 'null' ) {
 
-      final url = Uri.parse("https://get.geojs.io/v1/ip/geo.json");
-      final response = await http.get(url);
+        final url = Uri.parse("https://get.geojs.io/v1/ip/geo.json");
 
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        print(data.toString());
-        setTimeZoon(data["timezone"]);
+         final response = await http.get(url);
+
+        if (response.statusCode == 200) {
+          final data = json.decode(response.body);
+          print(data.toString());
+          setTimeZoon(data["timezone"]);
+          if (!isSelectLanguage()) {
+            toRemoveAll(
+              NavigationService.navigatorKey.currentContext!,
+              SelectLanguage(),
+            );
+          } else {
+            SplashController().getIntroRequest(
+              NavigationService.navigatorKey.currentContext!,
+            );
+          }
+        }
+      } else {
         if (!isSelectLanguage()) {
           toRemoveAll(
             NavigationService.navigatorKey.currentContext!,

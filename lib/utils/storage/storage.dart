@@ -81,16 +81,16 @@ ShopsAll getAllShop() {
   return data != null
       ? ShopsAll.fromJson(data)
       : ShopsAll(
-        id: null,
-        name: null,
-        address: null,
-        logo: null,
-        productsCount: null,
-        rating: 0,
-        slug: null,
-        totalSales: 0,
-        select: false,
-      );
+    id: null,
+    name: null,
+    address: null,
+    logo: null,
+    productsCount: null,
+    rating: 0,
+    slug: null,
+    totalSales: 0,
+    select: false,
+  );
 }
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////// LANGUAGE SECTION ///////////////////////////////////
@@ -224,8 +224,8 @@ setTimeZoon(String zoon) {
   GetStorage().write("zoon", zoon);
 }
 
-getTimeZoon() {
-  return GetStorage().read("zoon");
+String ? getTimeZoon() {
+  return GetStorage().read("zoon") ?? null;
 }
 
 setShowCaseHomeB(bool set) {
@@ -233,7 +233,7 @@ setShowCaseHomeB(bool set) {
 }
 
 bool getShowCaseHomeB() {
-  return GetStorage().read("set")??false;
+  return GetStorage().read("set") ?? false;
 }
 
 setShowCaseHomeS(bool set) {
@@ -241,5 +241,5 @@ setShowCaseHomeS(bool set) {
 }
 
 bool getShowCaseHomeS() {
-  return GetStorage().read("setS")??false;
+  return GetStorage().read("setS") ?? false;
 }

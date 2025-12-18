@@ -311,13 +311,18 @@ class ReelsProvider extends ChangeNotifier {
         hasMore = reelResponse.meta.currentPage < reelResponse.meta.lastPage;
 
         final newData = reelResponse.data.reversed.toList();
+        Future.sync(() {
+          for (var element in newData) {
+            if (element.videoLink.endsWith('.mp4')) {
+              videoUrls.add(element);
+            }
+          }
+        });
 
-        videoUrls.addAll(newData);
         _controllers.addAll(
           List<VideoPlayerController?>.filled(newData.length, null),
         );
 
-        // تحميل الفيديو الحالي + التالي
         await _preloadVideo(_currentVideoIndex);
         await _preloadVideo(_currentVideoIndex + 1);
 
@@ -341,9 +346,8 @@ class ReelsProvider extends ChangeNotifier {
     if (_controllers[index] != null) return;
 
     try {
-      final file = await DefaultCacheManager().getSingleFile(
-        videoUrls[index].videoLink,
-      );
+      final file = await DefaultCacheManager()
+          .getSingleFile(videoUrls[index].videoLink);
 
       final controller = VideoPlayerController.file(file);
       await controller.initialize();
@@ -355,30 +359,52 @@ class ReelsProvider extends ChangeNotifier {
     }
   }
 
+
   // =============================
   // PAGE CHANGE
   // =============================
   Future<void> onPageChanged(int newIndex) async {
+    // حماية من أي index غير صحيح
+    if (newIndex < 0 || newIndex >= videoUrls.length) return;
+
+    // أوقف السابق
     pauseVideoAtIndex(_currentVideoIndex);
+
     _currentVideoIndex = newIndex;
 
+    // جهّز الحالي
     await _preloadVideo(newIndex);
-    await _preloadVideo(newIndex + 1);
+
+    // جهّز التالي فقط لو موجود
+    if (newIndex + 1 < videoUrls.length) {
+      await _preloadVideo(newIndex + 1);
+    }
 
     _playVideoAtIndex(newIndex);
 
-    /// 🔥 PAGINATION TRIGGER
-    if (newIndex == videoUrls.length - 1 && hasMore && !loading) {
-      fetchReelsApi();
+    // 🔥 pagination بأمان
+    if (newIndex == videoUrls.length - 1 &&
+        hasMore &&
+        !loading) {
+      fetchReelsApi(); // لا await
     }
+
+    notifyListeners();
   }
+
 
   // =============================
   // PLAY / PAUSE
   // =============================
   void _playVideoAtIndex(int index) {
-    _controllers[index]?.play();
+    if (index < 0 || index >= _controllers.length) return;
+
+    final controller = _controllers[index];
+    if (controller == null || !controller.value.isInitialized) return;
+
+    controller.play();
   }
+
 
   void pauseVideoAtIndex(int index) {
     _controllers[index]?.pause();
@@ -404,93 +430,7 @@ class ReelsProvider extends ChangeNotifier {
     pageController.dispose();
   }
 
-  dynamic progress = 0;
-  String progressText = "0 %";
 
-  Future<void> saveNetworkVideoFile() async {
-    var connectivityResult = await Connectivity().checkConnectivity();
-    if (connectivityResult == ConnectivityResult.none) {
-      showCustomFlash(
-        message: "No internet connection available!".tr(),
-        messageType: MessageType.Faild,
-      );
-      return;
-    }
-
-    showModalBottomSheet(
-      context: NavigationService.navigatorKey.currentContext!,
-      isDismissible: false,
-      enableDrag: false,
-      builder: (_) {
-        return buildDownloadWidget();
-      },
-    );
-
-    try {
-      final fileUrl = videoUrls[_currentVideoIndex];
-      final String fileName = "${fileUrl.name}.mp4";
-      late String savePath;
-
-      if (Platform.isAndroid) {
-        final Directory? appDir = await getExternalStorageDirectory();
-        if (appDir == null) {
-          throw Exception("Unable to get storage directory.");
-        }
-
-        final Directory videoDir = Directory("${appDir.path}/Fils");
-        if (!videoDir.existsSync()) {
-          videoDir.createSync(recursive: true);
-        }
-
-        savePath = "${videoDir.path}/$fileName";
-      } else if (Platform.isIOS) {
-        final dir = await getApplicationDocumentsDirectory();
-        savePath = "${dir.path}/$fileName";
-      }
-
-      final response = await Dio().get(
-        fileUrl.videoLink,
-        options: Options(responseType: ResponseType.bytes),
-        onReceiveProgress: (count, total) {
-          progress = ((count / total) * 100).round();
-          progressText = "$progress %";
-          notifyListeners();
-          if (kDebugMode) {
-            print("Progress: $progressText");
-          }
-        },
-      );
-
-      final Uint8List videoBytes = Uint8List.fromList(response.data);
-      final file = File(savePath);
-      await file.writeAsBytes(videoBytes);
-
-      Navigator.of(NavigationService.navigatorKey.currentContext!).pop();
-
-      if (await file.exists()) {
-        showCustomFlash(
-          message: "Download Complete!".tr(),
-          messageType: MessageType.Success,
-        );
-      } else {
-        showCustomFlash(
-          message: "Saving failed!".tr(),
-          messageType: MessageType.Faild,
-        );
-      }
-    } catch (e) {
-      Navigator.of(NavigationService.navigatorKey.currentContext!).pop();
-      print("Error saving video: $e");
-      showCustomFlash(
-        message: "Download Failed!".tr(),
-        messageType: MessageType.Faild,
-      );
-    }
-
-    progress = 0;
-    progressText = "0 %";
-    notifyListeners();
-  }
 
   @override
   void dispose() {

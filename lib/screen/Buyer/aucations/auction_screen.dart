@@ -178,7 +178,15 @@ class AuctionScreen extends StatelessWidget {
                             shrinkWrap: true,
                             parseItem: (json) => Datum.fromJson(json),
                             itemBuilder: (BuildContext context, Datum item) {
-                              return ItemAuctionNew(item: item);
+                              if(item.auctionEndDate.minutes==0&&
+                                  item.auctionEndDate.seconds==0&&
+                                  item.auctionEndDate.hours==0
+                              ){
+                                return SizedBox();
+                              }else{
+                                return ItemAuctionNew(item: item);
+
+                              }
                             },
                           ),
                         ],

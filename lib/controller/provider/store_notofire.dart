@@ -69,6 +69,7 @@ class StoreNotifire with ChangeNotifier {
   }
 
   int qtuWSize = 1;
+
   selectItemSize(SizeModel sizeModelItem) {
     sizeModelItem.cleanAllSelect(list: listSizeProduct);
     countItemForOrder = 1;
@@ -92,9 +93,7 @@ class StoreNotifire with ChangeNotifier {
     required dynamic max,
   }) {
     if (changeCountType == ChangeCountType.PLUS) {
-
-        countItemForOrder++;
-
+      countItemForOrder++;
     } else {
       if (countItemForOrder > 1) {
         countItemForOrder--;
@@ -103,16 +102,13 @@ class StoreNotifire with ChangeNotifier {
     notifyListeners();
   }
 
-  functionAddCart({
-    required dynamic id,
-    bool isAuction = false,
-  }) async {
+  functionAddCart({required dynamic id, bool isAuction = false}) async {
     showBoatToast();
     var json = await NetworkHelper.sendRequest(
       requestType: RequestType.post,
       endpoint: "$addCart?is_auction=0",
       fields: {
-        "id":  id,
+        "id": id,
         if (nameSizeSelect != null) "variant": nameSizeSelect,
         "quantity": countItemForOrder,
       },
@@ -132,20 +128,22 @@ class StoreNotifire with ChangeNotifier {
           message: "The Product add cart successfully".tr(),
           messageType: MessageType.Success,
         );
-       /* NavigationService.navigatorKey.currentContext!
+        /* NavigationService.navigatorKey.currentContext!
             .read<HomeNotifire>()
             .getCountCart();*/
       } else {
         showCustomFlash(message: base.message, messageType: MessageType.Faild);
       }
-      NavigationService.navigatorKey.currentContext!.read<AppNotifire>(). onClickBottomNavigationBar(2);
+      NavigationService.navigatorKey.currentContext!
+          .read<AppNotifire>()
+          .onClickBottomNavigationBar(2);
 
       Navigator.pop(NavigationService.navigatorKey.currentContext!);
     }
   }
 
   // Function Get Data Store
-  functionGetDataStore({required bool isGetComplete }) async {
+  functionGetDataStore({required bool isGetComplete}) async {
     if (getAllShop().id != null) {
       final json = await NetworkHelper.sendRequest(
         requestType: RequestType.get,
@@ -153,25 +151,25 @@ class StoreNotifire with ChangeNotifier {
       );
       print("json shop/info/ ======== >${json.toString()} ");
 
-      if (json.containsKey("errorMessage")) {} else {
-
+      if (json.containsKey("errorMessage")) {
+      } else {
         ShopInfoResponse shopInfoResponse = ShopInfoResponse.fromJson(json);
         setShopInfo(shopInfoResponse);
-        if(isGetComplete){
-
+        if (isGetComplete) {
           if (getShopInfo().data!.description.toString() == "null" ||
-              getShopInfo().data!.description == null
-              ) {
+              getShopInfo().data!.description == null) {
             // TODO translate
-            showCustomFlash(message: "Please complete data store".tr(), messageType: MessageType.Faild);
+            showCustomFlash(
+              message: "Please complete data store".tr(),
+              messageType: MessageType.Faild,
+            );
 
-            ToWithFade(NavigationService.navigatorKey.currentContext!,
-                EditStoreInformation());
-
-
+            ToWithFade(
+              NavigationService.navigatorKey.currentContext!,
+              EditStoreInformation(),
+            );
           }
         }
-
       }
     }
 
@@ -200,6 +198,7 @@ class StoreNotifire with ChangeNotifier {
     }
   }*/
   }
+
   @override
   void dispose() {
     visible = false;
