@@ -85,6 +85,7 @@ class _HomeBuyerState extends State<HomeBuyer> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final homeNotifier = Provider.of<HomeNotifire>(context, listen: false);
+
       homeNotifier.getRequestByuer();
     });
   }
@@ -102,16 +103,9 @@ class _HomeBuyerState extends State<HomeBuyer> {
     });
     return Consumer2<HomeNotifire, AppNotifire>(
       builder: (context, controller, app, child) {
-        scrollDown();
         return Expanded(
           child: CustomRequestWidget(
             buildResponse: (context, HomeResponse? data) {
-              if (data!.data!.latestAuction != null) {
-                controller.insertWidgetListBanners(
-                  BannerHomeItem(homeNotifire: widget.homeNotifire, data: data),
-                );
-              }
-
               return SingleChildScrollView(
                 key: scrollViewKey,
                 controller: scrollController,
@@ -127,14 +121,12 @@ class _HomeBuyerState extends State<HomeBuyer> {
                     ),
                     SizedBox(height: heigth * 0.01),
 
-                    /*  BannerAdWidget(),
-                    SizedBox(height: heigth * 0.01),*/
                     ItemCategoryHome(
                       homeNotifire: widget.homeNotifire,
                       keyG: shopKey,
                     ),
                     SizedBox(height: heigth * 0.04),
-                    ItemProductHome(data: data),
+                    ItemProductHome(data: data!),
                     SizedBox(height: heigth * 0.01),
 
                     const BannerHomeGeneral(),

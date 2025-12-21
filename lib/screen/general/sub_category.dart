@@ -10,13 +10,13 @@ import 'package:fils/utils/route/route.dart';
 import 'package:fils/widget/item_back.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../model/response/online_store_response.dart';
-import '../../../../../utils/const.dart';
-import '../../../../../utils/global_function/loading_widget.dart';
+import '../../../model/response/online_store_response.dart';
+import '../../utils/const.dart';
+import '../../utils/global_function/loading_widget.dart';
 
-import '../../../../../utils/storage/storage.dart';
-import '../../../../../utils/theme/color_manager.dart';
-import '../../../../../widget/defulat_text.dart';
+import '../../utils/storage/storage.dart';
+import '../../utils/theme/color_manager.dart';
+import '../../widget/defulat_text.dart';
 
 class SubCategoryScreen extends StatelessWidget {
   final int category_id;

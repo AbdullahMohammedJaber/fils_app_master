@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api, must_be_immutable
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fils/utils/NavigatorObserver/Navigator_observe.dart';
 import 'package:fils/utils/route/route.dart';
 import 'package:fils/utils/storage/storage.dart';
 import 'package:fils/widget/button_widget.dart';
@@ -18,9 +19,11 @@ import 'package:fils/utils/global_function/update_controller.dart';
 import 'package:fils/utils/screen_catch/no_Internet_connection.dart';
 import 'package:fils/widget/defulat_text.dart';
 
+import '../../model/response/seller/package_info_response.dart';
 import '../../screen/Seller/store/create_store/screen/add_store.dart';
 import '../../screen/general/chat_boot.dart';
 import '../enum/message_type.dart';
+import '../global_function/loading_widget.dart';
 import '../message_app/show_flash_message.dart';
 import '../theme/color_manager.dart';
 import 'http_helper.dart';
@@ -39,6 +42,7 @@ class PaginationDialogCustom<T> extends StatefulWidget {
   final String Function(T)? itemSearchString;
   final bool isShowSelect;
   final bool isSelect;
+
   PaginationDialogCustom({
     super.key,
     required this.endpoint,
@@ -271,7 +275,10 @@ class _PaginationDialogCustomState<T> extends State<PaginationDialogCustom<T>> {
                       onTap: () {
                         if (getPackageInfo().data != null) {
                           if (getPackageInfo().data!.branch == 1) {
-                            ToRemove(context, AddStoreSeller(isComeSignup: false,));
+                            ToRemove(
+                              context,
+                              AddStoreSeller(isComeSignup: false),
+                            );
                           } else {
                             showCustomFlash(
                               message:
@@ -337,9 +344,8 @@ class _PaginationDialogCustomState<T> extends State<PaginationDialogCustom<T>> {
                                 setState(() => selectedItem = items[index]);
                                 widget.callback(selectedItem);
 
-                                 Navigator.of(context).pop();
+                                Navigator.of(context).pop();
                               },
-
                             );
                           },
                         ),
@@ -352,25 +358,7 @@ class _PaginationDialogCustomState<T> extends State<PaginationDialogCustom<T>> {
                       colorButton: primaryColor,
                       title: "Add Shop".tr(),
                       onTap: () {
-                        if (getPackageInfo().data == null) {
-                          showCustomFlash(
-                            message:
-                                "You are not allowed to add a shop. Develop a subscription package."
-                                    .tr(),
-                            messageType: MessageType.Faild,
-                          );
-                        } else {
-                          if (getPackageInfo().data!.branch == 1) {
-                            ToRemove(context, AddStoreSeller(isComeSignup: false,));
-                          } else {
-                            showCustomFlash(
-                              message:
-                                  "You are not allowed to add a shop. Develop a subscription package."
-                                      .tr(),
-                              messageType: MessageType.Faild,
-                            );
-                          }
-                        }
+                        functionCheckAddStore();
                       },
                     ),
                   ],
@@ -381,5 +369,43 @@ class _PaginationDialogCustomState<T> extends State<PaginationDialogCustom<T>> {
         ),
       ),
     );
+  }
+
+  functionCheckAddStore() async {
+    showBoatToast();
+    var json = await NetworkHelper.sendRequest(
+      requestType: RequestType.get,
+      endpoint: "get-current-package/${getUser()!.user!.id}",
+    );
+    closeAllLoading();
+
+    PackageInfoResponse packageInfoResponse = PackageInfoResponse.fromJson(
+      json,
+    );
+    printBlue("get-current-package");
+    printBlue(packageInfoResponse.toJson().toString());
+    setPackageInfo(packageInfoResponse);
+    if (packageInfoResponse.data == null) {
+      showCustomFlash(
+        message:
+            "You are not allowed to add a shop. Develop a subscription package."
+                .tr(),
+        messageType: MessageType.Faild,
+      );
+    } else {
+      if (getPackageInfo().data!.branch == 1) {
+        ToRemove(
+          NavigationService.navigatorKey.currentContext!,
+          AddStoreSeller(isComeSignup: false),
+        );
+      } else {
+        showCustomFlash(
+          message:
+              "You are not allowed to add a shop. Develop a subscription package."
+                  .tr(),
+          messageType: MessageType.Faild,
+        );
+      }
+    }
   }
 }

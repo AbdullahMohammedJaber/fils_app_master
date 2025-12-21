@@ -81,14 +81,21 @@ class _ShippingAdressState extends State<ShippingAdress> {
                         EditPersonalInformationScreen(),
                       );
                     } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return AddShippingAddress();
-                          },
-                        ),
-                      );
+                      if (getAllShop().id != null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return AddShippingAddress();
+                            },
+                          ),
+                        );
+                      } else {
+                        showCustomFlash(
+                          message: "Please Select your Shop".tr(),
+                          messageType: MessageType.Faild,
+                        );
+                      }
                     }
                   },
                   child: Container(

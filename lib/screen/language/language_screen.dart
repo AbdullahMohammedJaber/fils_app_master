@@ -11,7 +11,7 @@ import 'package:fils/widget/defulat_text.dart';
 import 'package:fils/widget/item_back.dart';
 import 'package:provider/provider.dart';
 
-import '../../../utils/enum/language_type.dart';
+import '../../utils/enum/language_type.dart';
 
 class LanguageScreen extends StatelessWidget {
   const LanguageScreen({super.key});

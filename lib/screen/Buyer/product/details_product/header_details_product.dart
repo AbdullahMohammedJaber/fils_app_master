@@ -44,6 +44,41 @@ class _HeaderDetailsProductState extends State<HeaderDetailsProduct> {
         url: widget.details.thumbnailImg!.data[0].url,
       ),
     );
+    listImage();
+  }
+
+  listImage() {
+    if (widget.details.variantProduct == 1) {
+      for (var element in widget.details.stocks!.data) {
+        for (var element2 in element.image.data!) {
+          widget.details.photos!.data.add(
+            PhotosDatum(
+              id: element2['id'],
+              type: "",
+              extension: '',
+              fileName: "",
+              fileOriginalName: "",
+              fileSize: 0,
+              url: element2['url'],
+            ),
+          );
+        }
+      }
+    } else {
+      for (var element in widget.details.photos!.data) {
+        widget.details.photos!.data.add(
+          PhotosDatum(
+            id: element.id,
+            type: "",
+            extension: '',
+            fileName: "",
+            fileOriginalName: "",
+            fileSize: 0,
+            url: element.url,
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -110,7 +145,6 @@ class _HeaderDetailsProductState extends State<HeaderDetailsProduct> {
               //     ),
               //   ),
               // ),
-
               Positioned(
                 top: heigth * 0.05,
                 left: width * 0.04,
@@ -147,8 +181,10 @@ class _HeaderDetailsProductState extends State<HeaderDetailsProduct> {
                                   "wishlists-remove-product/${widget.details.id}",
                             );
                             if (!json.containsKey("errorMessage")) {
-                              showCustomFlash(message: json['message'],
-                                  messageType:MessageType.Success);
+                              showCustomFlash(
+                                message: json['message'],
+                                messageType: MessageType.Success,
+                              );
                               if (updateControllerFav != null) {
                                 updateControllerFav!.update();
                               }
@@ -162,8 +198,10 @@ class _HeaderDetailsProductState extends State<HeaderDetailsProduct> {
                                   "wishlists-add-product/${widget.details.id}",
                             );
                             if (!json.containsKey("errorMessage")) {
-                              showCustomFlash(message: json['message'],
-                                  messageType:MessageType.Success);
+                              showCustomFlash(
+                                message: json['message'],
+                                messageType: MessageType.Success,
+                              );
                               if (updateControllerFav != null) {
                                 updateControllerFav!.update();
                               }

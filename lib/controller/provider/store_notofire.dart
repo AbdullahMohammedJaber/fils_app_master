@@ -102,7 +102,7 @@ class StoreNotifire with ChangeNotifier {
     notifyListeners();
   }
 
-  functionAddCart({required dynamic id, bool isAuction = false}) async {
+  functionAddCart({required dynamic id, bool isAuction = false ,required int type}) async {
     showBoatToast();
     var json = await NetworkHelper.sendRequest(
       requestType: RequestType.post,
@@ -134,9 +134,12 @@ class StoreNotifire with ChangeNotifier {
       } else {
         showCustomFlash(message: base.message, messageType: MessageType.Faild);
       }
-      NavigationService.navigatorKey.currentContext!
-          .read<AppNotifire>()
-          .onClickBottomNavigationBar(2);
+      if(type==2){
+        NavigationService.navigatorKey.currentContext!
+            .read<AppNotifire>()
+            .onClickBottomNavigationBar(2);
+      }
+
 
       Navigator.pop(NavigationService.navigatorKey.currentContext!);
     }

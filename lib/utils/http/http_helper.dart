@@ -250,8 +250,7 @@ class NetworkHelper {
             "You have exceeded the maximum number of attempts. Please try again after 43 seconds.";
         showCustomFlash(message: errorMessage, messageType: MessageType.Faild);
         return {};
-      }
-      else if (response.statusCode == 401) {
+      } else if (response.statusCode == 401) {
         BaseResponse baseResponse = BaseResponse.fromJson(
           json.decode(response.body),
         );
@@ -266,8 +265,7 @@ class NetworkHelper {
           const LoginScreen(),
         );
         return {};
-      }
-      else {
+      } else {
         printWarning("======> Response Error");
         printWarningLong("$url  ${json.decode(response.body).toString()}");
         BaseResponse baseResponse = BaseResponse.fromJson(

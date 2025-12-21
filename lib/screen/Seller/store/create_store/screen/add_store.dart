@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fils/main.dart';
 import 'package:fils/utils/strings_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,15 +11,16 @@ import 'package:fils/widget/defulat_text.dart';
 import 'package:fils/widget/item_back.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../utils/storage/storage.dart';
 import '../../../../../widget/custom_validation.dart';
 import '../../../../../widget/defualt_text_form_faild.dart';
+import '../../../../../widget/flip_view.dart';
 import '../controller/create_store_notifire.dart';
 
 class AddStoreSeller extends StatefulWidget {
   final bool isComeSignup;
-  const AddStoreSeller({super.key ,required this.isComeSignup});
 
-
+  const AddStoreSeller({super.key, required this.isComeSignup});
 
   @override
   State<AddStoreSeller> createState() => _AddStoreSellerState();
@@ -49,7 +51,41 @@ class _AddStoreSellerState extends State<AddStoreSeller> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: heigth * 0.06, width: width),
-                    itemBackAndTitle(context, title: "Add about store".tr()),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            if (widget.isComeSignup) {
+                              RestartWidget.restartApp(context);
+                            } else {
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: SizedBox(
+                            height: getLang() == 'ar' ? 30 : 28,
+                            width: 40,
+                            child: FlipView(
+                              child: Center(
+                                child: SvgPicture.asset(
+                                  "assets/icons/back.svg",
+                                  color: getTheme() ? white : Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(width: width * 0.01),
+                        DefaultText(
+                          "Add about store".tr(),
+                          color: primaryDarkColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ],
+                    ),
+
                     SizedBox(height: heigth * 0.03),
                     DefaultText(
                       "Store Add".tr(),
@@ -184,10 +220,10 @@ class _AddStoreSellerState extends State<AddStoreSeller> {
                             }
                           },
                           child: TextFormFieldWidget(
-                             controller: controller.dec,
+                            controller: controller.dec,
                             textInputType: TextInputType.name,
                             hintText: "description".tr(),
-                           ),
+                          ),
                         ),
                       ],
                     ),
@@ -222,12 +258,11 @@ class _AddStoreSellerState extends State<AddStoreSeller> {
                     ),
                     SizedBox(height: heigth * 0.02),
                     Row(
-
                       children: [
                         Row(
                           children: [
                             GestureDetector(
-                              onTap: (){
+                              onTap: () {
                                 controller.changeTypeStore(1);
                               },
                               child: Container(
@@ -236,23 +271,28 @@ class _AddStoreSellerState extends State<AddStoreSeller> {
                                 decoration: BoxDecoration(
                                   border: Border.all(color: textColor),
                                 ),
-                                child: controller.typeStore==1?Container(
-                                  height: 15,
-                                  width: 15,
-                                  margin: EdgeInsets.all(2),
-                                  color: primaryColor,
-                                  ):null ,
+                                child:
+                                    controller.typeStore == 1
+                                        ? Container(
+                                          height: 15,
+                                          width: 15,
+                                          margin: EdgeInsets.all(2),
+                                          color: primaryColor,
+                                        )
+                                        : null,
                               ),
                             ),
                             SizedBox(width: 15),
-                            DefaultText("${"Home Store".tr()}\n${"(not license)".tr()}"),
+                            DefaultText(
+                              "${"Home Store".tr()}\n${"(not license)".tr()}",
+                            ),
                           ],
                         ),
                         SizedBox(width: 20),
                         Row(
                           children: [
                             GestureDetector(
-                              onTap: (){
+                              onTap: () {
                                 controller.changeTypeStore(2);
                               },
                               child: Container(
@@ -261,107 +301,118 @@ class _AddStoreSellerState extends State<AddStoreSeller> {
                                 decoration: BoxDecoration(
                                   border: Border.all(color: textColor),
                                 ),
-                                child: controller.typeStore==2?Container(
-                                  height: 15,
-                                  width: 15,
-                                  margin: EdgeInsets.all(2),
-                                  color: primaryColor,
-                                ):null ,
+                                child:
+                                    controller.typeStore == 2
+                                        ? Container(
+                                          height: 15,
+                                          width: 15,
+                                          margin: EdgeInsets.all(2),
+                                          color: primaryColor,
+                                        )
+                                        : null,
                               ),
                             ),
                             SizedBox(width: 15),
-                            DefaultText("${"Store out".tr()}\n${"(license)".tr()}"),
+                            DefaultText(
+                              "${"Store out".tr()}\n${"(license)".tr()}",
+                            ),
                           ],
                         ),
                       ],
                     ),
-                    controller.typeStore==1?SizedBox():
-                    Column(
-                      children: [
-                        SizedBox(height: heigth * 0.02),
-                        // Upload Product Image Done
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                    controller.typeStore == 1
+                        ? SizedBox()
+                        : Column(
                           children: [
-                            DefaultText(
-                              "License Number".tr(),
-                              color: blackColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                            SizedBox(width: width, height: heigth * 0.01),
-                            ValidateWidget(
-                              validator: (value) {
-                                if (controller.licenseNumberC.text.isEmpty && controller.typeStore==2) {
-                                  return requiredField;
-                                } else {
-                                  return null;
-                                }
-                              },
-                              child: TextFormFieldWidget(
-                                isPreffix: true,
-                                controller: controller.licenseNumberC,
-                                textInputType: TextInputType.name,
-                                hintText: "License Number".tr(),
-                                pathIconPrefix: "assets/icons/product_image.svg",
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: heigth * 0.02),
-
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            DefaultText(
-                              "Upload License Image".tr(),
-                              color: blackColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                            SizedBox(width: width, height: heigth * 0.01),
-                            ValidateWidget(
-                              validator: (value) {
-                                if (controller.fileLicenseC == null&& controller.typeStore==2) {
-                                  return requiredField;
-                                } else {
-                                  return null;
-                                }
-                              },
-                              child: TextFormFieldWidget(
-                                isPreffix: true,
-                                onTap: () {
-                                  controller.selectAndUploadFileC();
-                                },
-                                hintText: "License Image".tr(),
-                                pathIconPrefix: "assets/icons/product_image.svg",
-                                customIcon: Container(
-                                  width: width * 0.1,
-                                  height: heigth * 0.06,
-                                  decoration: BoxDecoration(
-                                    color: greyLight,
-                                    borderRadius:
-                                        const BorderRadiusDirectional.only(
-                                          bottomEnd: Radius.circular(12),
-                                          topEnd: Radius.circular(12),
-                                        ),
+                            SizedBox(height: heigth * 0.02),
+                            // Upload Product Image Done
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                DefaultText(
+                                  "License Number".tr(),
+                                  color: blackColor,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                ),
+                                SizedBox(width: width, height: heigth * 0.01),
+                                ValidateWidget(
+                                  validator: (value) {
+                                    if (controller
+                                            .licenseNumberC
+                                            .text
+                                            .isEmpty &&
+                                        controller.typeStore == 2) {
+                                      return requiredField;
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  child: TextFormFieldWidget(
+                                    isPreffix: true,
+                                    controller: controller.licenseNumberC,
+                                    textInputType: TextInputType.name,
+                                    hintText: "License Number".tr(),
+                                    pathIconPrefix:
+                                        "assets/icons/product_image.svg",
                                   ),
-                                  child: Center(
-                                    child: SvgPicture.asset(
-                                      "assets/icons/gellary_black.svg",
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: heigth * 0.02),
+
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                DefaultText(
+                                  "Upload License Image".tr(),
+                                  color: blackColor,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                ),
+                                SizedBox(width: width, height: heigth * 0.01),
+                                ValidateWidget(
+                                  validator: (value) {
+                                    if (controller.fileLicenseC == null &&
+                                        controller.typeStore == 2) {
+                                      return requiredField;
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  child: TextFormFieldWidget(
+                                    isPreffix: true,
+                                    onTap: () {
+                                      controller.selectAndUploadFileC();
+                                    },
+                                    hintText: "License Image".tr(),
+                                    pathIconPrefix:
+                                        "assets/icons/product_image.svg",
+                                    customIcon: Container(
+                                      width: width * 0.1,
+                                      height: heigth * 0.06,
+                                      decoration: BoxDecoration(
+                                        color: greyLight,
+                                        borderRadius:
+                                            const BorderRadiusDirectional.only(
+                                              bottomEnd: Radius.circular(12),
+                                              topEnd: Radius.circular(12),
+                                            ),
+                                      ),
+                                      child: Center(
+                                        child: SvgPicture.asset(
+                                          "assets/icons/gellary_black.svg",
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
-                    ),
-
 
                     SizedBox(height: heigth * 0.04),
-
 
                     ButtonWidget(
                       title: "Send".tr(),

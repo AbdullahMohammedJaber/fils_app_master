@@ -8,9 +8,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fils/utils/global_function/loading_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:fils/controller/provider/store_notofire.dart';
-import '../../../../utils/const.dart';
-import '../../../../utils/theme/color_manager.dart';
-import '../../../../widget/flip_view.dart';
+import '../../../utils/const.dart';
+import '../../../utils/theme/color_manager.dart';
+import '../../../widget/flip_view.dart';
 import '../../../model/response/seller/details_product_seller.dart';
 import '../../../utils/global_function/image_view.dart';
 

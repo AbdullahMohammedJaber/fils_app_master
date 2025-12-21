@@ -12,8 +12,8 @@ import 'package:fils/widget/item_back.dart';
 import 'package:fils/utils/const.dart';
 import 'package:provider/provider.dart';
 
-import '../../../utils/storage/storage.dart';
-import '../../../widget/dialog_auth.dart';
+import '../../utils/storage/storage.dart';
+import '../../widget/dialog_auth.dart';
 
 import '../language/language_screen.dart';
 import 'item_setting.dart';

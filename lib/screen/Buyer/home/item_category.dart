@@ -28,28 +28,18 @@ import 'dialog_create_store.dart';
 class ItemCategoryHome extends StatefulWidget {
   HomeNotifire? homeNotifire;
   GlobalKey? keyG;
-  ItemCategoryHome({super.key, this.homeNotifire , this.keyG});
+
+  ItemCategoryHome({super.key, this.homeNotifire, this.keyG});
 
   @override
   State<ItemCategoryHome> createState() => _ItemCategoryHomeState();
 }
 
 class _ItemCategoryHomeState extends State<ItemCategoryHome> {
-  late List<GlobalKey> showcaseKeys;
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    showcaseKeys = List.generate(lista.length, (index) => GlobalKey());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final bool isDone = getShowCaseHomeB();
-
-      if (!isDone) {
-        ShowCaseWidget.of(context).startShowCase(showcaseKeys);
-      }
-    });
   }
 
   List<CustomButton> lista = [
@@ -119,7 +109,6 @@ class _ItemCategoryHomeState extends State<ItemCategoryHome> {
           Container(
             alignment: AlignmentDirectional.centerStart,
             child: GridView.builder(
-
               padding: EdgeInsets.symmetric(horizontal: width * 0.03),
               physics: const BouncingScrollPhysics(),
               shrinkWrap: true,
@@ -131,80 +120,44 @@ class _ItemCategoryHomeState extends State<ItemCategoryHome> {
               ),
               itemCount: lista.length,
               itemBuilder: (context, index) {
-                return Showcase(
-                  key: showcaseKeys[index],
-                  title: lista[index].label,
-                  description: lista[index].dec,
-                  overlayOpacity: 0.7,
-                  descriptionAlignment: Alignment.center,
-                  scaleAnimationAlignment: Alignment.topCenter,
-                  tooltipPosition: TooltipPosition.right,
-                  showArrow: false,
-                  tooltipActions: [
-                    TooltipActionButton(
-                      type: TooltipDefaultActionType.next,
-                      backgroundColor: primaryColor,
-                      name: "Next".tr(),
-                      onTap: () {
-                        ShowCaseWidget.of(context).next();
-                        setShowCaseHomeB(true);
-                      },
-                      textStyle: TextStyle(color: white, fontFamily: "Almarai"),
-                    ),
-                    TooltipActionButton(
-                      type: TooltipDefaultActionType.skip,
-                      backgroundColor: error,
-                      name: "Skip".tr(),
-                      onTap: () {
-                        ShowCaseWidget.of(context).dismiss();
-                        setShowCaseHomeB(true);
-                      },
-                      textStyle: TextStyle(color: white, fontFamily: "Almarai"),
-                    ),
-                  ],
-                  onToolTipClick: () {
-                    ShowCaseWidget.of(context).next();
-                    setShowCaseHomeB(true);
-                  },
-                  child: GestureDetector(
-                    onTap: () async {
-                      if (index == 0) {
-                        ToWithFade(context, const ReelsScreen());
-                      } else if (index == 1) {
-                        ToWithFade(context, StoreScreen());
-                      } else if (index == 2) {
-                        ToWithFade(context, const AuctionScreen());
-                      } else if (index == 3) {
-                        if (isLogin()) {
-                          ToWithFade(context, const AllProductInMarketOpen());
-                        } else {
-                          showDialogAuth(context);
-                        }
-                      } else if (index == 4) {
-                        ToWithFade(context, CreateWebScreen());
-                      } else if (index == 5) {
-                        if (isLogin()) {
-                          if (getUser()!.user!.can_switch_between_accounts) {
-                            switchAccount(
-                              context,
-                              getUser()!.user!.type == "seller"
-                                  ? "customer"
-                                  : "seller",
-                            );
-                          } else {
-                            showStoreLoginDialog(context);
-                          }
-                        } else {
-                          showDialogAuth(context);
-                        }
+                return GestureDetector(
+                  onTap: () async {
+                    if (index == 0) {
+                      ToWithFade(context, const ReelsScreen());
+                    } else if (index == 1) {
+                      ToWithFade(context, StoreScreen());
+                    } else if (index == 2) {
+                      ToWithFade(context, const AuctionScreen());
+                    } else if (index == 3) {
+                      if (isLogin()) {
+                        ToWithFade(context, const AllProductInMarketOpen());
+                      } else {
+                        showDialogAuth(context);
                       }
-                    },
-                    child: CustomButton(
-                      label: lista[index].label,
-                      color: lista[index].color,
-                      path: lista[index].path,
-                      dec: lista[index].dec,
-                    ),
+                    } else if (index == 4) {
+                      ToWithFade(context, CreateWebScreen());
+                    } else if (index == 5) {
+                      if (isLogin()) {
+                        if (getUser()!.user!.can_switch_between_accounts) {
+                          switchAccount(
+                            context,
+                            getUser()!.user!.type == "seller"
+                                ? "customer"
+                                : "seller",
+                          );
+                        } else {
+                          showStoreLoginDialog(context);
+                        }
+                      } else {
+                        showDialogAuth(context);
+                      }
+                    }
+                  },
+                  child: CustomButton(
+                    label: lista[index].label,
+                    color: lista[index].color,
+                    path: lista[index].path,
+                    dec: lista[index].dec,
                   ),
                 );
               },

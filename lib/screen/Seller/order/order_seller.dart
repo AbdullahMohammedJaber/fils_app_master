@@ -56,7 +56,7 @@ class _OrderSellerState extends State<OrderSeller> {
                     requestType: RequestType.get,
                     requestBody: const {
                       "payment_status": "paid",
-                      // "delivery_status": ""
+                     // "delivery_status": "pending",
                     },
                     parseItem: (json) => OrderSeeler.fromJson(json),
                     itemBuilder: (context, item) {
@@ -187,7 +187,7 @@ class _OrderSellerState extends State<OrderSeller> {
                                               /* if (status == 4)
                                       GestureDetector(
                                         onTap: (){
-                                                                
+
                                         },
                                         child: Container(
                                           height: 50,

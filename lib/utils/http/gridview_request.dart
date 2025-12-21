@@ -11,12 +11,12 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../../screen/general/chat_boot.dart';
-import '../../utils/enum/request_type.dart';
-import '../../utils/global_function/printer.dart';
-import '../../utils/global_function/update_controller.dart';
-import '../../utils/http/service.dart';
-import '../../utils/screen_catch/no_Internet_connection.dart';
-import '../../utils/storage/storage.dart';
+import '../enum/request_type.dart';
+import '../global_function/printer.dart';
+import '../global_function/update_controller.dart';
+import 'service.dart';
+import '../screen_catch/no_Internet_connection.dart';
+import '../storage/storage.dart';
 import '../../widget/defulat_text.dart';
 import '../theme/color_manager.dart';
 

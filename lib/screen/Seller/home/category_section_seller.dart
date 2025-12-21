@@ -51,15 +51,8 @@ class _CategorySectionSellerState extends State<CategorySectionSeller> {
   @override
   void initState() {
     super.initState();
-    showcaseKeys = List.generate(lista.length, (index) => GlobalKey());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final bool isDone = getShowCaseHomeS();
 
-      if (!isDone) {
-        ShowCaseWidget.of(context).startShowCase(showcaseKeys);
-      }
-    });
   }
 
   @override
@@ -80,73 +73,31 @@ class _CategorySectionSellerState extends State<CategorySectionSeller> {
                   return Expanded(
                     child: Row(
                       children: [
-                        Showcase(
-                          key: showcaseKeys[index],
-                          title: lista[index].label,
-                          description: lista[index].dec,
-                          overlayOpacity: 0.7,
-                          descriptionAlignment: Alignment.center,
-                          scaleAnimationAlignment: Alignment.topCenter,
-                          tooltipPosition: TooltipPosition.right,
-                          showArrow: false,
-                          tooltipActions: [
-                            TooltipActionButton(
-                              type: TooltipDefaultActionType.next,
-                              backgroundColor: primaryColor,
-                              name: "Next".tr(),
-                              onTap: () {
-                                ShowCaseWidget.of(context).next();
-                                setShowCaseHomeS(true);
-                              },
-                              textStyle: TextStyle(
-                                color: white,
-                                fontFamily: "Almarai",
-                              ),
-                            ),
-                            TooltipActionButton(
-                              type: TooltipDefaultActionType.skip,
-                              backgroundColor: error,
-                              name: "Skip".tr(),
-                              onTap: () {
-                                ShowCaseWidget.of(context).dismiss();
-                                setShowCaseHomeS(true);
-                              },
-                              textStyle: TextStyle(
-                                color: white,
-                                fontFamily: "Almarai",
-                              ),
-                            ),
-                          ],
-                          onToolTipClick: () {
-                            ShowCaseWidget.of(context).next();
-                            setShowCaseHomeS(true);
-                          },
-                          child: GestureDetector(
-                            onTap: () {
-                              if (index == 1) {
-                                ToWithFade(
-                                  context,
-                                  const SubscriptionsScreen(typeStore: 0),
+                        GestureDetector(
+                          onTap: () {
+                            if (index == 1) {
+                              ToWithFade(
+                                context,
+                                const SubscriptionsScreen(typeStore: 0),
+                              );
+                            } else if (index == 0) {
+                              if (getAllShop().id == null) {
+                                showCustomFlash(
+                                  message: "Please Select your Shop".tr(),
+                                  messageType: MessageType.Faild,
                                 );
-                              } else if (index == 0) {
-                                if (getAllShop().id == null) {
-                                  showCustomFlash(
-                                    message: "Please Select your Shop".tr(),
-                                    messageType: MessageType.Faild,
-                                  );
-                                } else {
-                                  ToWithFade(context, const WalletScreen());
-                                }
-                              } else if (index == 2) {
-                                ToWithFade(context, const ReportsScreen());
+                              } else {
+                                ToWithFade(context, const WalletScreen());
                               }
-                            },
-                            child: CustomButton(
-                              label: lista[index].label,
-                              color: lista[index].color,
-                              path: lista[index].path,
-                              dec: lista[index].dec,
-                            ),
+                            } else if (index == 2) {
+                              ToWithFade(context, const ReportsScreen());
+                            }
+                          },
+                          child: CustomButton(
+                            label: lista[index].label,
+                            color: lista[index].color,
+                            path: lista[index].path,
+                            dec: lista[index].dec,
                           ),
                         ),
                       ],

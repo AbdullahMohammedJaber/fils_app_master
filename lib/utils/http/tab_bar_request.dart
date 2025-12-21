@@ -6,12 +6,12 @@ import 'package:fils/utils/global_function/printer.dart';
 import 'package:fils/widget/defulat_text.dart';
 import '../../model/response/item_product.dart';
 import '../../screen/Buyer/product/item_product_widget_g.dart';
-import '../../utils/screen_catch/no_Internet_connection.dart';
-import '../../utils/screen_catch/crach_screen.dart';
+import '../screen_catch/no_Internet_connection.dart';
+import '../screen_catch/crach_screen.dart';
 import '../../widget/grid_view_custom.dart';
 import '../const.dart';
 import '../enum/request_type.dart';
-import '../http/http_helper.dart';
+import 'http_helper.dart';
 import 'gridview_pagination_request.dart';
 
 class TabBarRequestWidget extends StatefulWidget {

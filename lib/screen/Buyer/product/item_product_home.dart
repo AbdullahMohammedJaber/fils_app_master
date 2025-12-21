@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fils/controller/provider/app_notifire.dart';
 import 'package:fils/screen/Buyer/product/product_into_store.dart';
+import 'package:fils/screen/Buyer/store/store_screen.dart';
 import 'package:fils/widget/flip_view.dart';
 import 'package:flutter/material.dart';
 
@@ -203,9 +204,7 @@ class ItemShopHome extends StatelessWidget {
                           const Spacer(),
                           GestureDetector(
                             onTap: () {
-                              context
-                                  .read<AppNotifire>()
-                                  .onClickBottomNavigationBar(1);
+                              ToWithFade(context, StoreScreen());
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(

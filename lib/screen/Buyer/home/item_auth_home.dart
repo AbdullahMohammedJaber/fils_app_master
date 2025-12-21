@@ -80,9 +80,16 @@ Widget authItem(HomeNotifire? homeNotifire, BuildContext context) {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  context
-                                      .read<AppNotifire>()
-                                      .onClickBottomNavigationBar(4);
+                                  if(getUser()!.user!.type!="seller"){
+                                    context
+                                        .read<AppNotifire>()
+                                        .onClickBottomNavigationBar(3);
+                                  }else{
+                                    context
+                                        .read<AppNotifire>()
+                                        .onClickBottomNavigationBar(4);
+                                  }
+
                                 },
                                 child: DefaultText(
                                   user.user!.user!.name,
