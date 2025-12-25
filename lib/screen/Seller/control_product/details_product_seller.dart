@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fils/controller/provider/app_notifire.dart';
 import 'package:fils/screen/Seller/control_product/all_users_reviews.dart';
-import 'package:fils/screen/Seller/control_product/edit_product_form.dart';
+import 'package:fils/screen/Seller/control_product/edit/edit_product_form.dart';
 import 'package:fils/utils/route/route.dart';
 import 'package:fils/utils/storage/storage.dart';
 import 'package:flutter/material.dart';

@@ -7,8 +7,10 @@ import 'package:fils/controller/provider/floating_button_provider.dart';
 
 import 'package:fils/model/response/category_response.dart';
 import 'package:fils/model/response/seller/details_product_seller.dart';
+import 'package:fils/screen/Seller/control_product/edit/variants_edit.dart';
 import 'package:fils/screen/Seller/control_product/show_image.dart';
 import 'package:fils/screen/Seller/control_product/show_multi_image.dart';
+import 'package:fils/screen/Seller/control_product/variants.dart';
 import 'package:fils/utils/const.dart';
 import 'package:fils/utils/enum/request_type.dart';
 import 'package:fils/utils/http/dialog_reauest_multi.dart';
@@ -25,8 +27,13 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:page_transition/page_transition.dart';
 
 import 'package:provider/provider.dart';
+
+import '../../../../utils/route/route.dart';
+import '../list_variant.dart';
+import 'list_variant_edit.dart';
 
 class EditProductForm extends StatelessWidget {
   final DetailsProductSeller detailsProductSellerResponse;
@@ -41,7 +48,9 @@ class EditProductForm extends StatelessWidget {
       Provider.of<FloatingButtonController>(context, listen: false).hide();
     });
     return ChangeNotifierProvider(
-      create: (context) => EditProductNotifire(detailsProductSellerResponse),
+      create:
+          (context) =>
+              EditProductNotifire.withData(detailsProductSellerResponse),
       child: Consumer2<EditProductNotifire, AppNotifire>(
         builder: (context, controller, app, child) {
           return Scaffold(
@@ -362,7 +371,99 @@ class EditProductForm extends StatelessWidget {
                           showMultiImageEdit(),
                         ],
                       ),
-                      SizedBox(width: width, height: heigth * 0.01),
+                      SizedBox(height: heigth * 0.02),
+
+                    /*  Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          DefaultText(
+                            "Options".tr(),
+                            color: blackColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                          SizedBox(width: width, height: heigth * 0.01),
+                          ValidateWidget(
+                            child: TextFormFieldWidget(
+                              isPreffix: true,
+                              onTap: () {
+                                TowithTrans(
+                                  context,
+                                  const OptionScreenEdit(),
+                                  PageTransitionType.rightToLeft,
+                                );
+                              },
+                              hintText: controller.hintOption.tr(),
+                              pathIconPrefix: "assets/icons/add_cir.svg",
+                              isIcon: true,
+                              pathIcon: "assets/icons/goo.svg",
+                            ),
+                          ),
+                        ],
+                      ),
+                      controller.sizeSelect.isEmpty &&
+                              controller.colorSelect.isEmpty
+                          ? const SizedBox()
+                          : SizedBox(height: heigth * 0.02),
+                      controller.sizeSelect.isEmpty &&
+                              controller.colorSelect.isEmpty
+                          ? const SizedBox()
+                          : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              DefaultText(
+                                "Variants".tr(),
+                                color: blackColor,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                              SizedBox(width: width, height: heigth * 0.01),
+                              ValidateWidget(
+                                validator: (value) {
+                                  bool flag = false;
+                                  if (controller.variantList.isEmpty) {
+                                    return requiredField;
+                                  } else {
+                                    for (var element
+                                        in controller.variantList) {
+                                      if (element.price == null ||
+                                          element.qty == null) {
+                                        flag = true;
+                                        break;
+                                      }
+                                    }
+                                  }
+                                  if (flag) {
+                                    return requiredField;
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                child: TextFormFieldWidget(
+                                  isPreffix: true,
+                                  onTap: () {
+                                    TowithTrans(
+                                      context,
+                                        ListVariantEdit(),
+                                      PageTransitionType.rightToLeft,
+                                    );
+                                  },
+                                  hintText:
+                                      controller.sizeSelect.isNotEmpty &&
+                                              controller.colorSelect.isNotEmpty
+                                          ? "${controller.sizeSelect.length * controller.colorSelect.length} "
+                                          : controller.sizeSelect.isNotEmpty
+                                          ? "${controller.sizeSelect.length} "
+                                          : "${controller.colorSelect.length} " +
+                                              "Variants".tr(),
+                                  pathIconPrefix: "assets/icons/gellary.svg",
+                                  isIcon: true,
+                                  pathIcon: "assets/icons/goo.svg",
+                                ),
+                              ),
+                            ],
+                          ),*/
+                      SizedBox(height: heigth * 0.02),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

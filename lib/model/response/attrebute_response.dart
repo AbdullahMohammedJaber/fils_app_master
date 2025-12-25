@@ -25,15 +25,16 @@ class AttrebuteProductResponse {
       AttrebuteProductResponse(
         status: json["status"],
         data: List<AttrebuteProduct>.from(
-            json["data"].map((x) => AttrebuteProduct.fromJson(x))),
+          json["data"].map((x) => AttrebuteProduct.fromJson(x)),
+        ),
         code: json["code"],
       );
 
   Map<String, dynamic> toJson() => {
-        "status": status,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
-        "code": code,
-      };
+    "status": status,
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    "code": code,
+  };
 }
 
 class AttrebuteProduct {
@@ -55,10 +56,10 @@ class AttrebuteProduct {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "values": List<dynamic>.from(values.map((x) => x.toJson())),
-      };
+    "id": id,
+    "name": name,
+    "values": List<dynamic>.from(values.map((x) => x.toJson())),
+  };
 }
 
 class Value {
@@ -66,33 +67,34 @@ class Value {
   dynamic attributeId;
   String value;
   dynamic colorCode;
-  DateTime createdAt;
-  DateTime updatedAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
   bool isSelect = false;
+
   Value({
     required this.id,
     required this.attributeId,
     required this.value,
     required this.colorCode,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory Value.fromJson(Map<String, dynamic> json) => Value(
-        id: json["id"],
-        attributeId: json["attribute_id"],
-        value: json["value"],
-        colorCode: json["color_code"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
-      );
+    id: json["id"],
+    attributeId: json["attribute_id"],
+    value: json["value"],
+    colorCode: json["color_code"],
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
+  );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "attribute_id": attributeId,
-        "value": value,
-        "color_code": colorCode,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
-      };
+    "id": id,
+    "attribute_id": attributeId,
+    "value": value,
+    "color_code": colorCode,
+    "created_at": createdAt!.toIso8601String(),
+    "updated_at": updatedAt!.toIso8601String(),
+  };
 }

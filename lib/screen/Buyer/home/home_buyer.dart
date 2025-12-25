@@ -49,36 +49,6 @@ class _HomeBuyerState extends State<HomeBuyer> {
   final GlobalKey shopKey = GlobalKey();
   final GlobalKey scrollViewKey = GlobalKey();
 
-  void scrollDown() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final targetContext = shopKey.currentContext;
-      final scrollContext = scrollViewKey.currentContext;
-
-      if (targetContext == null || scrollContext == null) return;
-
-      final RenderBox targetBox = targetContext.findRenderObject() as RenderBox;
-      final RenderBox scrollBox = scrollContext.findRenderObject() as RenderBox;
-
-      final targetGlobal = targetBox.localToGlobal(Offset.zero);
-
-      final targetLocalToScroll = scrollBox.globalToLocal(targetGlobal);
-
-      double targetOffset = scrollController.offset + targetLocalToScroll.dy;
-
-      if (targetOffset < scrollController.position.minScrollExtent) {
-        targetOffset = scrollController.position.minScrollExtent;
-      } else if (targetOffset > scrollController.position.maxScrollExtent) {
-        targetOffset = scrollController.position.maxScrollExtent;
-      }
-
-      scrollController.animateTo(
-        targetOffset,
-        duration: const Duration(milliseconds: 600),
-        curve: Curves.easeInOut,
-      );
-    });
-  }
-
   @override
   void initState() {
     super.initState();

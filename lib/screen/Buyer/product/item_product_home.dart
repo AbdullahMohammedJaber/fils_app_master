@@ -267,19 +267,16 @@ class ItemShopHome extends StatelessWidget {
                                         child: Row(
                                           children: [
                                             SizedBox(height: heigth * 0.02),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 12,
-                                                  ),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
+                                            Container(
+                                              height: heigth * 0.13,
+                                              width: width * 0.31,
+                                              color: Colors.transparent,
+                                              child: Center(
                                                 child: Image.network(
                                                   dataInter.logo!,
                                                   height: heigth * 0.13,
-                                                  width: width * 0.31,
-                                                  fit: BoxFit.cover,
+                                                  width: width * 0.30,
+                                                  fit: BoxFit.contain,
                                                 ),
                                               ),
                                             ),

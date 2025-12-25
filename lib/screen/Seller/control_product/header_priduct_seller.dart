@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fils/screen/Seller/control_product/edit_product_form.dart';
+import 'package:fils/screen/Seller/control_product/edit/edit_product_form.dart';
 import 'package:fils/utils/route/route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

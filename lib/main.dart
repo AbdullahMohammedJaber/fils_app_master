@@ -6,6 +6,7 @@ import 'package:app_links/app_links.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fils/controller/provider/edit_product_notifire.dart';
 import 'package:fils/controller/provider/home_notifire.dart';
 import 'package:fils/controller/provider/theme_notifire.dart';
 import 'package:fils/general_whatsapp_button.dart';
@@ -258,7 +259,8 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => WalletNotifire()),
         ChangeNotifierProvider(create: (context) => FloatingButtonController()),
         ChangeNotifierProvider(create: (context) => ProductNotifire()),
-        // ChangeNotifierProvider(create: (_) => BannerAdsProvider()),
+        ChangeNotifierProvider(create: (context) => EditProductNotifire()),
+
       ],
       child: Consumer2<AppNotifire, ThemeProvider>(
         builder: (context, app, theme, child) {

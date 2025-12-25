@@ -54,7 +54,7 @@ class AppNotifire extends ChangeNotifier {
     CartScreen(),
 
     ProfileScreen(),
-    const FundsWalletScreen(),
+
   ];
   List<Widget> screenListSeller = [
     HomeScreen(),

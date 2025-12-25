@@ -21,7 +21,11 @@ import '../../utils/const.dart';
 import '../../utils/global_function/number_format.dart';
 
 class EditProductNotifire with ChangeNotifier {
-  EditProductNotifire(DetailsProductSeller detailsProductSellerResponse) {
+  EditProductNotifire();
+
+  EditProductNotifire.withData(
+    DetailsProductSeller detailsProductSellerResponse,
+  ) {
     fetchCategory(detailsProductSellerResponse);
     productNameEdit.text = detailsProductSellerResponse.productName;
     productStoreNameEdit.text = detailsProductSellerResponse.shopName;
@@ -43,21 +47,14 @@ class EditProductNotifire with ChangeNotifier {
     categoryIdSelect = null;
     categoryNameSelect = "Add Category".tr();
     imageFileEdit = null;
-    if (detailsProductSellerResponse.colors.isNotEmpty) {
-      switchColor = true;
-      isShowListColor = true;
-      fetchColor();
-    }
-    if (detailsProductSellerResponse.choiceOptions.isNotEmpty) {
-      switchSize = true;
-      isShowListSize = true;
-    }
+
     if (detailsProductSellerResponse.photos.data.isNotEmpty) {
       for (var element in detailsProductSellerResponse.photos.data) {
         idImagesLogoEdit.add(element.id.toString());
         imageUrlListEdit.add(element.url);
       }
     }
+
     idImagesLogoEdit.removeLast();
     if (detailsProductSellerResponse.variantProduct == 1) {
       for (var element in detailsProductSellerResponse.stocks.data) {
@@ -187,24 +184,23 @@ class EditProductNotifire with ChangeNotifier {
     });
   }
 
-  deleteImageSelectEdit(index , bool isFile) {
-
-    if(isFile){
-    if (imageFilesListEdit.length == 1) {
-      imageFilesListEdit.clear();
-      selectImageEdit = -1;
-      notifyListeners();
-    } else {
-      for (dynamic i = 0; i < imageFilesListEdit.length; i++) {
-        if (i == index) {
-          imageFilesListEdit.removeAt(i);
-          selectImageEdit = -1;
-          notifyListeners();
-          break;
+  deleteImageSelectEdit(index, bool isFile) {
+    if (isFile) {
+      if (imageFilesListEdit.length == 1) {
+        imageFilesListEdit.clear();
+        selectImageEdit = -1;
+        notifyListeners();
+      } else {
+        for (dynamic i = 0; i < imageFilesListEdit.length; i++) {
+          if (i == index) {
+            imageFilesListEdit.removeAt(i);
+            selectImageEdit = -1;
+            notifyListeners();
+            break;
+          }
         }
       }
-    }}
-    else{
+    } else {
       if (imageUrlListEdit.length == 1) {
         imageUrlListEdit.clear();
         selectImageEdit = -1;
@@ -237,147 +233,6 @@ class EditProductNotifire with ChangeNotifier {
 
   changeIndexSelectImageEdit(dynamic index) {
     selectImageEdit = index;
-    notifyListeners();
-  }
-
-  ////////////////////////////////////////////////////////////
-  List<VariantsModel> variantList = [];
-  bool switchColor = false;
-  bool switchSize = false;
-  List<ColorProduct> colorSelect = [];
-  List<ColorProduct> colorList = [];
-  bool isShowListColor = false;
-  bool isShowListSize = false;
-  List<Value> sizeSelect = [];
-  List<Value> sizeList = [];
-  String hintOption = "Add Options (Colors, size)".tr();
-
-  changeSwitchColor(bool value) {
-    switchColor = value;
-    notifyListeners();
-    if (switchColor) {
-      isShowListColor = false;
-      fetchColor();
-    } else {
-      colorSelect = [];
-      colorList = [];
-      isShowListColor = false;
-    }
-  }
-
-  fetchColor() async {
-    colorSelect = [];
-    colorList = [];
-    variantList = [];
-    showBoatToast();
-    var json = await NetworkHelper.sendRequest(
-      requestType: RequestType.get,
-      endpoint: "products/colors",
-    );
-    closeAllLoading();
-    if (json.containsKey("errorMessage")) {
-    } else {
-      ColorProductResponse colorProductResponse = ColorProductResponse.fromJson(
-        json,
-      );
-      for (var element in colorProductResponse.data) {
-        colorList.add(element);
-      }
-      notifyListeners();
-    }
-  }
-
-  selectColorId(ColorProduct color) {
-    dynamic index = colorSelect.indexWhere((element) => element.id == color.id);
-
-    if (index != -1) {
-      colorSelect[index].isSelect = false;
-      colorSelect.removeAt(index);
-    } else {
-      color.isSelect = true;
-      colorSelect.add(color);
-    }
-    changeHintOption();
-    notifyListeners();
-  }
-
-  changeShowListColor() {
-    isShowListColor = !isShowListColor;
-    notifyListeners();
-  }
-
-  changeHintOption() {
-    hintOption = "";
-    if (colorSelect.isNotEmpty && sizeSelect.isNotEmpty) {
-      hintOption =
-          "Color".tr() +
-          "${colorSelect.length} " +
-          " , " +
-          "Size".tr() +
-          "${sizeSelect.length} ";
-    } else {
-      if (colorSelect.isNotEmpty && sizeSelect.isEmpty) {
-        hintOption = "Color".tr() + " ${colorSelect.length}";
-      } else {
-        hintOption = "Size".tr() + " ${sizeSelect.length}";
-      }
-    }
-  }
-
-  changeSwitchSize(bool value) {
-    switchSize = value;
-    notifyListeners();
-    if (switchSize) {
-      isShowListSize = false;
-      fetchSize();
-    } else {
-      sizeSelect = [];
-      sizeList = [];
-      isShowListSize = false;
-    }
-  }
-
-  changeShowListSize() {
-    isShowListSize = !isShowListSize;
-    notifyListeners();
-  }
-
-  fetchSize() async {
-    sizeSelect = [];
-    sizeList = [];
-    variantList = [];
-    showBoatToast();
-    var json = await NetworkHelper.sendRequest(
-      requestType: RequestType.get,
-      endpoint: "products/attributes",
-    );
-    closeAllLoading();
-    if (json.containsKey("errorMessage")) {
-    } else {
-      AttrebuteProductResponse attrebuteProductResponse =
-          AttrebuteProductResponse.fromJson(json);
-      for (var element in attrebuteProductResponse.data) {
-        if (element.name == "Size") {
-          for (var v in element.values) {
-            sizeList.add(v);
-          }
-        }
-      }
-      notifyListeners();
-    }
-  }
-
-  selectSizeId(Value size) {
-    dynamic index = sizeSelect.indexWhere((element) => element.id == size.id);
-
-    if (index != -1) {
-      sizeSelect[index].isSelect = false;
-      sizeSelect.removeAt(index);
-    } else {
-      size.isSelect = true;
-      sizeSelect.add(size);
-    }
-    changeHintOption();
     notifyListeners();
   }
 
@@ -488,5 +343,244 @@ class EditProductNotifire with ChangeNotifier {
       }
     }
     changeListCategory(_sub);
+   /* fetchColor();
+    fetchSize();
+    initOption(detailsProductSellerResponse);*/
+  }
+
+  bool switchColor = false;
+  bool switchSize = false;
+  List<ColorProduct> colorSelect = [];
+  List<ColorProduct> colorList = [];
+  bool isShowListColor = false;
+  bool isShowListSize = false;
+  List<Value> sizeSelect = [];
+  List<Value> sizeList = [];
+  String hintOption = "Add Options (Colors, size)".tr();
+
+  initOption(DetailsProductSeller detailsProductSellerResponse) {
+    int lengthColor = detailsProductSellerResponse.colors.length;
+    int lengthChoiceOptions = detailsProductSellerResponse.choiceOptions[0].values.length;
+    if (lengthColor != 0) {
+      switchColor = true;
+      colorSelect = [];
+      for (var element in detailsProductSellerResponse.colors) {
+        colorSelect.add(
+          ColorProduct(id: element, code: element, name: element),
+        );
+      }
+    }
+    if (lengthChoiceOptions != 0) {
+      switchSize = true;
+      sizeSelect = [];
+      for (var element
+          in detailsProductSellerResponse.choiceOptions[0].values) {
+        sizeSelect.add(
+          Value(
+            id: element,
+            value: element,
+            attributeId: element,
+            colorCode: element,
+          ),
+        );
+      }
+    }
+    if (detailsProductSellerResponse.stocks.data.isNotEmpty) {
+      for (var element in detailsProductSellerResponse.stocks.data) {
+        variantList.add(
+          VariantsModel(
+            name: element.variant,
+            img: element.image.data[0].url,
+            price: element.price.toString(),
+            qty: element.qty.toString(),
+            sku: element.sku,
+          ),
+        );
+      }
+    }
+
+    changeHintOption();
+  }
+
+  bool checkVaireantList(String name) {
+    bool flag = false;
+    if (variantList.isNotEmpty) {
+      for (var element in variantList) {
+        if (element.name == name) {
+          flag = true;
+          break;
+        }
+      }
+    }
+    return flag;
+  }
+
+  changeHintOption() {
+    hintOption = "";
+    if (colorSelect.isNotEmpty && sizeSelect.isNotEmpty) {
+      hintOption =
+          "Color".tr() +
+          "${colorSelect.length} " +
+          " , " +
+          "Size".tr() +
+          "${sizeSelect.length} ";
+    } else {
+      if (colorSelect.isNotEmpty && sizeSelect.isEmpty) {
+        hintOption = "Color".tr() + " ${colorSelect.length}";
+      } else {
+        hintOption = "Size".tr() + " ${sizeSelect.length}";
+      }
+    }
+    notifyListeners();
+    print(hintOption);
+  }
+
+  changeSwitchColor(bool value) {
+    switchColor = value;
+    notifyListeners();
+    if (switchColor) {
+      isShowListColor = false;
+      fetchColor();
+    } else {
+      colorSelect = [];
+      colorList = [];
+      isShowListColor = false;
+    }
+  }
+
+  changeSwitchSize(bool value) {
+    switchSize = value;
+    notifyListeners();
+    if (switchSize) {
+      isShowListSize = false;
+      fetchSize();
+    } else {
+      sizeSelect = [];
+      sizeList = [];
+      isShowListSize = false;
+    }
+  }
+
+  changeShowListColor() {
+    isShowListColor = !isShowListColor;
+    notifyListeners();
+  }
+
+  changeShowListSize() {
+    isShowListSize = !isShowListSize;
+    notifyListeners();
+  }
+
+  selectColorId(ColorProduct color) {
+    dynamic index = colorSelect.indexWhere((element) => element.id == color.id);
+
+    if (index != -1) {
+      colorSelect[index].isSelect = false;
+      colorSelect.removeAt(index);
+    } else {
+      color.isSelect = true;
+      colorSelect.add(color);
+    }
+    changeHintOption();
+    notifyListeners();
+  }
+
+  fetchColor() async {
+    colorSelect = [];
+    colorList = [];
+    variantList = [];
+    showBoatToast();
+    var json = await NetworkHelper.sendRequest(
+      requestType: RequestType.get,
+      endpoint: "products/colors",
+    );
+    closeAllLoading();
+    if (json.containsKey("errorMessage")) {
+    } else {
+      ColorProductResponse colorProductResponse = ColorProductResponse.fromJson(
+        json,
+      );
+      for (var element in colorProductResponse.data) {
+        colorList.add(element);
+      }
+      notifyListeners();
+    }
+  }
+
+  fetchSize() async {
+    sizeSelect = [];
+    sizeList = [];
+    variantList = [];
+    showBoatToast();
+    var json = await NetworkHelper.sendRequest(
+      requestType: RequestType.get,
+      endpoint: "products/attributes",
+    );
+    closeAllLoading();
+    if (json.containsKey("errorMessage")) {
+    } else {
+      AttrebuteProductResponse attrebuteProductResponse =
+          AttrebuteProductResponse.fromJson(json);
+      for (var element in attrebuteProductResponse.data) {
+        if (element.name == "Size") {
+          for (var v in element.values) {
+            sizeList.add(v);
+          }
+        }
+      }
+      notifyListeners();
+    }
+  }
+
+  selectSizeId(Value size) {
+    dynamic index = sizeSelect.indexWhere((element) => element.id == size.id);
+
+    if (index != -1) {
+      sizeSelect[index].isSelect = false;
+      sizeSelect.removeAt(index);
+    } else {
+      size.isSelect = true;
+      sizeSelect.add(size);
+    }
+    changeHintOption();
+    notifyListeners();
+  }
+
+  //////////////////////////////////////////////////////
+  List<VariantsModel> variantList = [];
+
+  addDetailsVariants({
+    String? price,
+    String? qty,
+    String? img,
+    String? name,
+    File? file,
+  }) {
+    dynamic index = variantList.indexWhere((element) => element.name == name);
+    if (index != -1) {
+      variantList.removeAt(index);
+      variantList.add(
+        VariantsModel(
+          name: name,
+          qty: qty,
+          img: img,
+          price: price,
+          sku: "null",
+          fileImage: file,
+        ),
+      );
+    } else {
+      variantList.add(
+        VariantsModel(
+          name: name,
+          qty: qty,
+          img: img,
+          price: price,
+          sku: "null",
+          fileImage: file,
+        ),
+      );
+    }
+    notifyListeners();
   }
 }
