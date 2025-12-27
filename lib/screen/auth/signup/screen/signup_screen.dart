@@ -99,7 +99,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           fontWeight: FontWeight.w600,
                           fontSize: 20,
                         ),
-                        SizedBox(width: width, height: heigth * 0.05),
+                       /* SizedBox(width: width, height: heigth * 0.05),
                         Container(
                           height: 50,
                           width: width,
@@ -172,7 +172,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               const SizedBox(width: 10),
                             ],
                           ),
-                        ),
+                        ),*/
                         SizedBox(width: width, height: heigth * 0.05),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

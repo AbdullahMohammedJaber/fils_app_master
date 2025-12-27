@@ -501,7 +501,7 @@ class ProductNotifire with ChangeNotifier {
   }
 
   addProduct() async {
-    Map<String, dynamic> variantData = {};
+  /*  Map<String, dynamic> variantData = {};
 
     for (var variant in variantList) {
       if (variant.name != null) {
@@ -510,7 +510,7 @@ class ProductNotifire with ChangeNotifier {
         variantData["qty_${variant.name}"] = variant.qty;
         variantData["img_${variant.name}"] = variant.img;
       }
-    }
+    }*/
     String result = idImagesLogo.join(",");
     showBoatToast();
     final json = await NetworkHelper.sendRequest(
@@ -564,7 +564,7 @@ class ProductNotifire with ChangeNotifier {
         "auction_type": "normal",
         "min_qty": "1",
         "lang": getLocal() ?? "sa",
-        if (variantList.isNotEmpty) ...variantData,
+        /*if (variantList.isNotEmpty) ...variantData,*/
       },
     );
     closeAllLoading();

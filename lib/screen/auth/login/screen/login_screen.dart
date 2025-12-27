@@ -91,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontSize: 20,
                         ),
                         SizedBox(width: width, height: heigth * 0.05),
-                        Container(
+                       /* Container(
                           height: 50,
                           width: width,
                           decoration: BoxDecoration(
@@ -172,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ],
                           ),
                         ),
-                        SizedBox(width: width, height: heigth * 0.05),
+                        SizedBox(width: width, height: heigth * 0.05),*/
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

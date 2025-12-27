@@ -255,12 +255,10 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => AuthNotifire()),
         ChangeNotifierProvider(create: (context) => UserNotifier()),
         ChangeNotifierProvider(create: (context) => AuctionNotifier()),
-
         ChangeNotifierProvider(create: (context) => WalletNotifire()),
         ChangeNotifierProvider(create: (context) => FloatingButtonController()),
         ChangeNotifierProvider(create: (context) => ProductNotifire()),
         ChangeNotifierProvider(create: (context) => EditProductNotifire()),
-
       ],
       child: Consumer2<AppNotifire, ThemeProvider>(
         builder: (context, app, theme, child) {

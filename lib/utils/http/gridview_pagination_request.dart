@@ -73,15 +73,17 @@ class _InfiniteScrollGridViewState<T> extends State<InfiniteScrollGridView<T>> {
     super.initState();
     _futureData = _fetchData();
 
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels >=
-              _scrollController.position.maxScrollExtent - 200 &&
-          hasMore &&
-          !isLoading &&
-          !isFromCache) {
-        _fetchData();
-      }
-    });
+    if (!widget.shwrinkWrap) {
+      _scrollController.addListener(() {
+        if (_scrollController.position.pixels >=
+                _scrollController.position.maxScrollExtent - 200 &&
+            hasMore &&
+            !isLoading &&
+            !isFromCache) {
+          _fetchData();
+        }
+      });
+    }
   }
 
   Future<List<T>> _fetchData({bool isRefresh = false}) async {
@@ -195,6 +197,11 @@ class _InfiniteScrollGridViewState<T> extends State<InfiniteScrollGridView<T>> {
 
   @override
   Widget build(BuildContext context) {
+    final listPhysics =
+        widget.shwrinkWrap
+            ? const NeverScrollableScrollPhysics()
+            : BouncingScrollPhysics();
+
     return FutureBuilder<List<T>>(
       future: _futureData,
       builder: (context, snapshot) {
@@ -233,6 +240,14 @@ class _InfiniteScrollGridViewState<T> extends State<InfiniteScrollGridView<T>> {
             );
           }
         } else {
+          if (widget.shwrinkWrap && hasMore && !isLoading && !isFromCache) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              // double-check mounted because callback might run after dispose
+              if (mounted && hasMore && !isLoading && !isFromCache) {
+                _fetchData();
+              }
+            });
+          }
           return RefreshIndicator(
             onRefresh: () async {
               setState(() {

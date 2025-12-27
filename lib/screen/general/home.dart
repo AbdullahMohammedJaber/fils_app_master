@@ -35,7 +35,7 @@ class HomeScreen extends StatelessWidget {
           homeNotifire = context.watch();
           return Stack(
             children: [
-              Positioned(child: Image.asset("assets/icons/home_bar.png")),
+            //  Positioned(child: Image.asset("assets/icons/home_bar.png")),
               Scaffold(
                 appBar: AppBar(
                   toolbarHeight: 0,

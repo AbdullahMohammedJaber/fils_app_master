@@ -395,7 +395,7 @@ class FormAddProduct extends StatelessWidget {
                             controller.colorSelect.isEmpty
                         ? const SizedBox()
                         : SizedBox(height: heigth * 0.02),
-                    controller.sizeSelect.isEmpty &&
+                   /* controller.sizeSelect.isEmpty &&
                             controller.colorSelect.isEmpty
                         ? const SizedBox()
                         : Column(
@@ -453,7 +453,7 @@ class FormAddProduct extends StatelessWidget {
                               ),
                             ),
                           ],
-                        ),
+                        ),*/
                     SizedBox(height: heigth * 0.02),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

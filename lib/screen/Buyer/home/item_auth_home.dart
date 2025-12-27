@@ -74,7 +74,7 @@ Widget authItem(HomeNotifire? homeNotifire, BuildContext context) {
                             children: [
                               DefaultText(
                                 user.greeting.tr(),
-                                color:  white ,
+                                color:  textColor ,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 12,
                               ),
@@ -93,7 +93,7 @@ Widget authItem(HomeNotifire? homeNotifire, BuildContext context) {
                                 },
                                 child: DefaultText(
                                   user.user!.user!.name,
-                                  color:  white  ,
+                                  color:  grey  ,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 14,
                                   overflow: TextOverflow.ellipsis,
@@ -110,7 +110,7 @@ Widget authItem(HomeNotifire? homeNotifire, BuildContext context) {
                                       child: DefaultText(
                                         getAllShop().name ??
                                             "Please Select your Shop".tr(),
-                                        color:   white ,
+                                        color:   grey ,
                                         fontSize: 12,
                                         overflow: TextOverflow.visible,
                                       ),

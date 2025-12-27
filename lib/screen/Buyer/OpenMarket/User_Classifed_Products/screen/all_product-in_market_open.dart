@@ -161,48 +161,35 @@ class AllProductInMarketOpen extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(width: 10),
-                           /* controller.showFormFieldSearch
-                                ? const SizedBox()
-                                : GestureDetector(
-                                  onTap: () {
-                                    controller.runAnimation();
-                                  },
-                                  child: Container(
-                                    height: 50,
-                                    width: 50,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(50),
-                                      color: secondColor,
-                                    ),
-                                    child: Center(
-                                      child: SvgPicture.asset(
-                                        "assets/icons/search_home.svg",
-                                        color: white,
-                                      ),
-                                    ),
-                                  ),
-                                ),*/
                           ],
                         ),
                       ),
 
-                      SizedBox(height: heigth * 0.08),
-                    /*  if (controller.showFormFieldSearch)
-                        AnimatedOpacity(
-                          duration: const Duration(seconds: 1),
-                          opacity: controller.showFormFieldSearch ? 1.0 : 0.0,
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                ),
-                                child: ItemSearch(),
+                      SizedBox(height: heigth * 0.01),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                              height: 40,
+                              width: 80,
+                              decoration: BoxDecoration(
+                                 borderRadius: BorderRadius.circular(4),
+                                color: kohliH.withOpacity(0.4),
                               ),
-                              SizedBox(height: heigth * 0.02),
-                            ],
-                          ),
-                        ),*/
+                              child: Center(
+                                child: DefaultText(
+                                  'Add Product'.tr(),
+                                  color: kohliH ,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: heigth * 0.03),
+
                       const BannerHomeGeneral(),
                       SizedBox(height: heigth * 0.02),
 

@@ -83,19 +83,19 @@ class _HomeBuyerState extends State<HomeBuyer> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(height: heigth * 0.01),
-                    GestureDetector(
+
+                    /*  GestureDetector(
                       onTap: () {
                         toUrl('http://wibex.io');
                       },
                       child: Image.asset("assets/images/web.png"),
                     ),
-                    SizedBox(height: heigth * 0.01),
-
+                    SizedBox(height: heigth * 0.01),*/
                     ItemCategoryHome(
                       homeNotifire: widget.homeNotifire,
                       keyG: shopKey,
                     ),
-                    SizedBox(height: heigth * 0.04),
+                    SizedBox(height: heigth * 0.01),
                     ItemProductHome(data: data!),
                     SizedBox(height: heigth * 0.01),
 
