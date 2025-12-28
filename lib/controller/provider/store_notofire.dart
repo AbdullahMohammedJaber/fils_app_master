@@ -46,20 +46,6 @@ class StoreNotifire with ChangeNotifier {
   dynamic idSizeSelect;
   String? nameSizeSelect;
 
-  changeListSize(List<StocksDatum> data) {
-    listSizeProduct = [];
-    for (var action in data) {
-      listSizeProduct.add(
-        SizeModel(
-          id: action.id,
-          name: action.variant,
-          select: false,
-          price: action.price,
-          qtu: action.qty,
-        ),
-      );
-    }
-  }
 
   dynamic totalPrice = 0;
 
@@ -70,18 +56,8 @@ class StoreNotifire with ChangeNotifier {
 
   int qtuWSize = 1;
 
-  selectItemSize(SizeModel sizeModelItem) {
-    sizeModelItem.cleanAllSelect(list: listSizeProduct);
-    countItemForOrder = 1;
-    for (var element in listSizeProduct) {
-      if (element.id == sizeModelItem.id) {
-        element.select = true;
-        idSizeSelect = element.id!;
-        nameSizeSelect = element.name!;
-        qtuWSize = element.qtu;
-        changePrice(element.price);
-      }
-    }
+  selectItemSize(String sizeModelItem) {
+    nameSizeSelect = sizeModelItem;
     notifyListeners();
   }
 

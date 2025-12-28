@@ -94,13 +94,13 @@ class ProductNotifire with ChangeNotifier {
     if (pickedFile != null) {
       videoFile = File(pickedFile.path);
 
-      final fileEdit = await Navigator.push(
+     /* final fileEdit = await Navigator.push(
         NavigationService.navigatorKey.currentContext!,
         MaterialPageRoute(
           builder: (_) => FileBasedVideoEditScreen(videoFile: videoFile!),
         ),
-      );
-      await uploadVideoServer(fileEdit);
+      );*/
+      await uploadVideoServer(videoFile!);
     } else {
       print('لم يتم اختيار أي فيديو');
     }

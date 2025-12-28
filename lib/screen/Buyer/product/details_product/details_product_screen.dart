@@ -41,12 +41,14 @@ class _DetailsProductScreenState extends State<DetailsProductScreen> {
     changeDomain1();
     super.initState();
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
     changeDomain2();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -101,7 +103,8 @@ class _DetailsProductScreenState extends State<DetailsProductScreen> {
                       ),
 
                       // Product Size (xl , xxl)
-                      details.variantProduct == 1
+                      details.colors!.isNotEmpty ||
+                              details.choiceOptions![0].values!.isNotEmpty
                           ? OptionSection(details: details)
                           : const SizedBox(),
                       SizedBox(height: heigth * 0.03),
@@ -138,19 +141,28 @@ class _DetailsProductScreenState extends State<DetailsProductScreen> {
                         child: Row(
                           children: [
                             GestureDetector(
-                              onTap:(){
+                              onTap: () {
                                 if (isLogin()) {
-                                  if (details.variantProduct == 1) {
-                                    if (store.idSizeSelect == null) {
+                                  if (details
+                                      .choiceOptions![0]
+                                      .values!
+                                      .isNotEmpty) {
+                                    if (store.nameSizeSelect == null) {
                                       showCustomFlash(
                                         message: "Please Select option".tr(),
                                         messageType: MessageType.Faild,
                                       );
                                     } else {
-                                      store.functionAddCart(id: details.id, type: 1);
+                                      store.functionAddCart(
+                                        id: details.id,
+                                        type: 1,
+                                      );
                                     }
                                   } else {
-                                    store.functionAddCart(id: details.id, type: 1);
+                                    store.functionAddCart(
+                                      id: details.id,
+                                      type: 1,
+                                    );
                                   }
                                 } else {
                                   showDialogAuth(context);
@@ -164,7 +176,9 @@ class _DetailsProductScreenState extends State<DetailsProductScreen> {
                                   color: primaryColor,
                                 ),
                                 child: Center(
-                                  child: SvgPicture.asset("assets/icons/plus.svg"),
+                                  child: SvgPicture.asset(
+                                    "assets/icons/plus.svg",
+                                  ),
                                 ),
                               ),
                             ),
@@ -186,23 +200,31 @@ class _DetailsProductScreenState extends State<DetailsProductScreen> {
                             Expanded(
                               child: GestureDetector(
                                 onTap: () {
-                                       if(isLogin()){
-                                         if (details.variantProduct == 1) {
-                                           if (store.idSizeSelect == null) {
-                                             showCustomFlash(
-                                               message: "Please Select option".tr(),
-                                               messageType: MessageType.Faild,
-                                             );
-                                           } else {
-                                             store.functionAddCart(id: details.id, type: 2);
-                                           }
-                                         } else {
-                                           store.functionAddCart(id: details.id , type: 2);
-                                         }
-
-                                       }else{
-                                         showDialogAuth(context);
-                                       }
+                                  if (isLogin()) {
+                                    if (details
+                                        .choiceOptions![0]
+                                        .values!
+                                        .isNotEmpty) {
+                                      if (store.nameSizeSelect == null) {
+                                        showCustomFlash(
+                                          message: "Please Select option".tr(),
+                                          messageType: MessageType.Faild,
+                                        );
+                                      } else {
+                                        store.functionAddCart(
+                                          id: details.id,
+                                          type: 2,
+                                        );
+                                      }
+                                    } else {
+                                      store.functionAddCart(
+                                        id: details.id,
+                                        type: 2,
+                                      );
+                                    }
+                                  } else {
+                                    showDialogAuth(context);
+                                  }
                                 },
                                 child: Container(
                                   height: 55,

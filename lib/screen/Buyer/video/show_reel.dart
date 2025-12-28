@@ -250,6 +250,7 @@ class _ReelsScreenState extends State<ReelsScreen> {
       child: Consumer<ReelsProvider>(
         builder: (_, p, __) {
           return Scaffold(
+            backgroundColor: Colors.black,
             body: Stack(
               children: [
                 PageView.builder(
@@ -268,7 +269,7 @@ class _ReelsScreenState extends State<ReelsScreen> {
                       children: [
                         SizedBox.expand(
                           child: FittedBox(
-                            fit: BoxFit.cover,
+                            fit: BoxFit.contain,
                             child: SizedBox(
                               width: controller.value.size.width,
                               height: controller.value.size.height,
@@ -285,9 +286,9 @@ class _ReelsScreenState extends State<ReelsScreen> {
                   },
                 ),
                 Positioned(
-                  top: 20,
-                  right: 10,
-                  left: 10,
+                  top: 40,
+                  right: 15,
+                  left: 15,
 
                   child: itemBackAndTitle(context, title: "Reels".tr() , color: white),
                 ),

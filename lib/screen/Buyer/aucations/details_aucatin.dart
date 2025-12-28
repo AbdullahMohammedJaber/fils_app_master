@@ -235,28 +235,32 @@ class DetailsAuctions extends StatelessWidget {
                       data.data.auction_type == "live"
                           ? GestureDetector(
                             onTap: () async {
-                              if (data.data.isLive == 1 ||
-                                  data.data.isPaused == 1) {
-                                if (data.data.channel == null) {
+                              if (isLogin()) {
+                                if (data.data.isLive == 1 ||
+                                    data.data.isPaused == 1) {
+                                  if (data.data.channel == null) {
+                                    showCustomFlash(
+                                      message: "Live Not Available".tr(),
+                                      messageType: MessageType.Faild,
+                                    );
+                                  } else {
+                                    ToWithFade(
+                                      context,
+                                      LiveWatchPage(
+                                        playbackUrl:
+                                            data.data.channel!.playbackUrl,
+                                        detailsAuctionResponse: data,
+                                      ),
+                                    );
+                                  }
+                                } else {
                                   showCustomFlash(
                                     message: "Live Not Available".tr(),
                                     messageType: MessageType.Faild,
                                   );
-                                } else {
-                                  ToWithFade(
-                                    context,
-                                    LiveWatchPage(
-                                      playbackUrl:
-                                          data.data.channel!.playbackUrl,
-                                      detailsAuctionResponse: data,
-                                    ),
-                                  );
                                 }
                               } else {
-                                showCustomFlash(
-                                  message: "Live Not Available".tr(),
-                                  messageType: MessageType.Faild,
-                                );
+                                showDialogAuth(context);
                               }
                             },
                             child: Container(

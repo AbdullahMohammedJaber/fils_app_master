@@ -20,10 +20,6 @@ class OptionSection extends StatefulWidget {
 class _OptionSectionState extends State<OptionSection> {
   @override
   void initState() {
-    if (widget.details.stocks!.data.isNotEmpty) {
-      context.read<StoreNotifire>().changeListSize(widget.details.stocks!.data);
-    }
-
     super.initState();
   }
 
@@ -79,24 +75,20 @@ class _OptionSectionState extends State<OptionSection> {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
-                          if (store.listSizeProduct[index].qtu == 0) {
-                          } else {
-                            store.selectItemSize(store.listSizeProduct[index]);
-                          }
+                          store.selectItemSize(
+                            widget.details.choiceOptions![0].values![index],
+                          );
                         },
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color:
-                                  store.listSizeProduct[index].qtu == 0
-                                      ? textColor
-                                      : primaryColor,
-                            ),
+                            border: Border.all(color: primaryColor),
                             color:
-                                store.listSizeProduct[index].qtu == 0
-                                    ? textColor
-                                    : store.listSizeProduct[index].select!
+                                store.nameSizeSelect ==
+                                        widget
+                                            .details
+                                            .choiceOptions![0]
+                                            .values![index]
                                     ? primaryColor
                                     : white,
                           ),
@@ -104,11 +96,13 @@ class _OptionSectionState extends State<OptionSection> {
                             padding: const EdgeInsets.symmetric(horizontal: 15),
                             child: Center(
                               child: DefaultText(
-                                store.listSizeProduct[index].name!,
+                                widget.details.choiceOptions![0].values![index],
                                 color:
-                                    store.listSizeProduct[index].qtu == 0
-                                        ? white
-                                        : store.listSizeProduct[index].select!
+                                    store.nameSizeSelect ==
+                                            widget
+                                                .details
+                                                .choiceOptions![0]
+                                                .values![index]
                                         ? white
                                         : textColor,
                                 fontSize: 12,
@@ -120,7 +114,7 @@ class _OptionSectionState extends State<OptionSection> {
                       );
                     },
                     scrollDirection: Axis.horizontal,
-                    itemCount: store.listSizeProduct.length,
+                    itemCount: widget.details.choiceOptions![0].values!.length,
                     separatorBuilder: (BuildContext context, dynamic index) {
                       return const SizedBox(width: 10);
                     },

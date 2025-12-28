@@ -429,7 +429,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ],
                         ),
-                        if (Platform.isAndroid || Platform.isIOS) ...[
+                        if (Platform.isAndroid ) ...[
                           SizedBox(height: heigth * 0.03),
                           Row(
                             children: [
